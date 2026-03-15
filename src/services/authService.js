@@ -72,8 +72,7 @@ export const fetchUser = async () => {
 export const fetchUserById = async () => {
     try {
         const res = await axios.get("/user/getUser");
-        // console.log("res : ", res)
-        // console.log("res:", res.data);
+        
         return res.data;
 
     } catch (error) {

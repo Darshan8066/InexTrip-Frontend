@@ -4,6 +4,7 @@ import Navbar from '../../component/Navbar';
 import Footer from '../../component/Footer';
 import { storageService } from '../../services/storageService';
 import { fetchTripById } from '../../services/tripServices';
+import { useAuth } from '../../context/AuthContext';
 
 const TripType = {
     AI: "AI",
@@ -14,7 +15,7 @@ const TripDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [trip, setTrip] = useState(null);
-    const [user, setUser] = useState();
+    const { user } = useAuth();
     const [numPersons, setNumPersons] = useState(1);
     const [showGallery, setShowGallery] = useState(false);
     const [activeImage, setActiveImage] = useState(0);
@@ -51,7 +52,8 @@ const TripDetails = () => {
             alert("Itinerary saved to your Created Trips!");
             navigate('/history');
         } else {
-            navigate(`/payment/${trip.id}?persons=${numPersons}`);
+            navigate(`/payment/${trip._id}?persons=${numPersons}`);
+            // admin/payments
         }
     };
 

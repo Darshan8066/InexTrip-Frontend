@@ -1,4 +1,4 @@
-// export const fetchAdminStats = async () => {
+// export const fetchAdmin = async () => {
 //     try {
 //         // const res = await axios.get('/api/admin/stats');
 //         const totalUsers = 20;
@@ -9,26 +9,26 @@
 
 //         // Mock monthly data
 //         const monthlyRevenue = [
-    //             { name: 'Jan', revenue: 4000 },
-    //             { name: 'Feb', revenue: 3000 },
-    //             { name: 'Mar', revenue: 2000 },
-    //             { name: 'Apr', revenue: 2780 },
-    //             { name: 'May', revenue: 1890 },
-    //             { name: 'Jun', revenue: 2390 },
-    //         ];
+//                 { name: 'Jan', revenue: 4000 },
+//                 { name: 'Feb', revenue: 3000 },
+//                 { name: 'Mar', revenue: 2000 },
+//                 { name: 'Apr', revenue: 2780 },
+//                 { name: 'May', revenue: 1890 },
+//                 { name: 'Jun', revenue: 2390 },
+//             ];
 
-    //         const popularDestinations = [
-        //             { city: 'Goa', percentage: 85 },
+//             const popularDestinations = [
+//                     { city: 'Goa', percentage: 85 },
 //             { city: 'Kyoto', percentage: 70 },
 //             { city: 'Manali', percentage: 55 },
 //             { city: 'Coorg', percentage: 40 },
 //         ];
 
 //         return ({
-    //             totalUsers,
-    //             totalTrips,
-    //             totalRevenue,
-    //             monthlyRevenue,
+//                 totalUsers,
+//                 totalTrips,
+//                 totalRevenue,
+//                 monthlyRevenue,
 //             popularDestinations
 //         });
 //         // console.log("res:", res.data);

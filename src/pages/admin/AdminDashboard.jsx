@@ -100,7 +100,7 @@ const AdminDashboard = ({ onLogout }) => {
     ];
 
     if (loading) {
-        return <div style={{color:"red"}} className="p-10 text-center">Loading Dashboard...</div>;
+        return <div style={{ color: "red" }} className="p-10 text-center">Loading Dashboard...</div>;
     }
 
     return (
@@ -134,7 +134,18 @@ const AdminDashboard = ({ onLogout }) => {
                                 <p className="text-slate-900 font-black text-xs group-hover:text-indigo-600 transition-colors">{user?.fullname}</p>
                                 <p className="text-indigo-600 text-[8px] font-black uppercase tracking-widest">Master Node</p>
                             </div>
-                            <img src={user?.profilePhoto} className="w-10 h-10 rounded-xl border-2 border-white shadow-md" alt="Admin" />
+                            {/* <img src={user?.profilePhoto} className="w-10 h-10 rounded-xl border-2 border-white shadow-md" alt="Admin" /> */}
+
+                            {user?.profilePhoto ? (
+                                <img
+                                    src={user.profilePhoto}
+                                    className="w-10 h-10 rounded-xl border-2 border-white shadow-md"
+                                />
+                            ) : (
+                                <div className="w-10 h-10 text-xl rounded-xl border-1 border-black bg-indigo-600 text-white flex items-center justify-center font-bold">
+                                    {user?.fullname?.charAt().toUpperCase()}
+                                </div>
+                            )}
                         </button>
                     </div>
                 </header>

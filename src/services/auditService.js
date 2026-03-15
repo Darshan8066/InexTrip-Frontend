@@ -5,9 +5,11 @@
 //     return response.json();
 //   },
 
+import axios from "./axios";
+
 export const fetchauditUser = async (targetUserId) => {
     try {
-        const res = await fetch(`/api/users/audit/${targetUserId}`);
+        const res = await axios.get(`/api/users/audit/${targetUserId}`);
         console.log(res);
         return res.data;
 
