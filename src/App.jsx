@@ -8,7 +8,6 @@ import Home from './pages/Home';
 import Dashboard from './pages/user/UserDashboard';
 import EditProfile from './component/EditProfile';
 import TripDetails from './pages/user/TripDetails';
-import Counter from './component/counter';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './component/ProtectedRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
