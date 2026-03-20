@@ -1,8 +1,8 @@
 import axios from "./axios";
 
-export const saveHistory = async () => {
+export const saveHistory = async (data) => {
     try {
-        const res = await axios.post(`/history/save`);
+        const res = await axios.post(`/history/save`, data);
         return res.data;
 
     } catch (error) {

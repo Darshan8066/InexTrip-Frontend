@@ -11,8 +11,10 @@ const useTrips = () => {
 
     const loadTrips = useCallback(async () => {
         try {
+
             setLoading(true);
             const data = await fetchTrip();
+            console.log("loadTrips:",data.trip)
             setTrips(data.trip);
             setError(null);
         } catch (err) {
@@ -21,7 +23,7 @@ const useTrips = () => {
             setLoading(false);
         }
     }, []);
-    
+
     useEffect(() => {
         loadTrips();
     }, [loadTrips])

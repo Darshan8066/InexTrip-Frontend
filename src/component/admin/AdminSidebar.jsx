@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-export const sidebarLinks = [
+const sidebarLinks = [
     { path: '/admin/dashboard', label: 'Overview', icon: '⚡' },
     { path: '/admin/users', label: 'Explorers', icon: '👥' },
     { path: '/admin/trips', label: 'Inventory', icon: '🗺️' },
     { path: '/admin/payments', label: 'Ledger', icon: '💰' },
+    { path: '/admin/reviews', label: 'Reviews', icon: '⭐' },
 ];
 export default function AdminSidebar({ onLogout, isSidebarVisible }) {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function AdminSidebar({ onLogout, isSidebarVisible }) {
 
     return (
         <div>
+
             <aside className={`border-r border-slate-200 flex flex-col bg-white h-screen sticky top-0 shadow-sm z-50 transition-all duration-300 overflow-hidden ${isSidebarVisible ? 'w-72 opacity-100' : 'w-0 opacity-0 px-0 border-none'}`}>
                 <div className="p-8 mb-4 min-w-[288px]">
                     <Link to="/admin" className="flex items-center space-x-3">
@@ -22,7 +24,7 @@ export default function AdminSidebar({ onLogout, isSidebarVisible }) {
                             <span className="block text-lg font-black text-slate-900 tracking-tight leading-none">CORE</span>
                             <span className="text-[9px] font-black text-indigo-600 uppercase tracking-widest">Administrator</span>
                         </div>
-                    </Link> 
+                    </Link>
                 </div>
 
                 <nav className="flex-grow px-6 space-y-2 min-w-[288px]">

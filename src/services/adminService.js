@@ -35,7 +35,7 @@
 //         // return res.data;
 
 //     } catch (error) {
-    
+
 //         const message =
 //             error.response?.data?.message || "Something went wrong";
 
@@ -52,13 +52,8 @@ import axios from "./axios";
 export const fetchAdminStats = async () => {
   try {
 
-    const token = localStorage.getItem("token");
 
-    const res = await axios.get("/admin/stats", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const res = await axios.get("/user/stats");
 
     return res.data;
 

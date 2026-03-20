@@ -35,8 +35,10 @@ export const signup = async (data) => {
 };
 
 
+
 export const updateProfile = async (data) => {
     try {
+        console.log("updateProfile:", data)
         const res = await axios.put('/user/update', data);
         return res.data;
 
@@ -72,7 +74,7 @@ export const fetchUser = async () => {
 export const fetchUserById = async () => {
     try {
         const res = await axios.get("/user/getUser");
-        
+
         return res.data;
 
     } catch (error) {

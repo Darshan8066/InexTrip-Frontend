@@ -5,6 +5,7 @@ import axios from "./axios";
 export const fetchTrip = async () => {
     try {
         const res = await axios.get('/trip/get');
+        console.log("fetchTrip :",res)
         return res.data;
 
     } catch (error) {

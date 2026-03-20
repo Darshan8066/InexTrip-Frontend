@@ -5,7 +5,7 @@ import Footer from '../../component/Footer';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { fetchTrip } from '../../services/tripServices';
+// import { fetchTrip } from '../../services/tripServices';
 import { clearHistory, fetchHistoryByUserId } from '../../services/historyService';
 
 const HistoryPage = () => {
@@ -22,14 +22,18 @@ const HistoryPage = () => {
 
     const loadData = async () => {
         try {
-            const [h, t] = await Promise.all([
-                fetchHistoryByUserId(),
-                fetchTrip()
-            ]); 
-            setHistory(h.history);
-            console.log("fetchHistoryByUserId :",h)
-            setTrips(t.trip);
-            console.log("trips:", t);
+
+            const res = await fetchHistoryByUserId();
+            setHistory(res.history);
+            console.log("history : ", res.history);
+            // const [h, t] = await Promise.all([
+            //     fetchHistoryByUserId(),
+            //     fetchTrip()
+            // ]);
+            // setHistory(h.history);
+            // console.log("fetchHistoryByUserId :", h)
+            // setTrips(t.trip);
+            // console.log("trips:", t);
         } catch (err) {
             console.error(err);
         } finally {
@@ -63,7 +67,7 @@ const HistoryPage = () => {
     const handleClearHistory = async () => {
         try {
             clearHistory()
-              setHistory([]);
+            setHistory([]);
             setShowClearConfirm(false);
         } catch (err) {
             console.error(err);
@@ -146,13 +150,13 @@ const HistoryPage = () => {
                 ) : (
                     <div className="grid grid-cols-1 gap-8">
                         {filteredHistory?.map(item => {
-                           const trip = trips?.find(t => String(t._id) === String(item.tripId));
-                            if (!trip) return null;
+                            // const trip = trips?.find(t => String(t._id) === String(item.tripId));
+                            // if (!trip) return null;
 
                             return (
                                 <div key={item._id} className="bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl border border-slate-100 flex flex-col md:flex-row transition-all group border-l-8 border-l-indigo-600">
                                     <div className="md:w-80 h-48 md:h-auto overflow-hidden relative">
-                                        <img src={trip.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                                        <img src={item.tripId.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                                         <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black text-indigo-600 uppercase tracking-widest shadow-md">
                                             {item.type === 'CREATED' ? 'AI Planned' : 'Community'}
                                         </div>
@@ -161,11 +165,11 @@ const HistoryPage = () => {
                                         <div>
                                             <div className="flex justify-between items-start mb-6">
                                                 <div>
-                                                    <h3 className="text-3xl font-black text-slate-900">{trip.to}</h3>
-                                                    <p className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.2em] mt-2">{trip.from} &bull; {trip.startDate}</p>
+                                                    <h3 className="text-3xl font-black text-slate-900">{item.tripId.to}</h3>
+                                                    <p className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.2em] mt-2">{item.tripId.from} &bull; {item.tripId.startDate}</p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-2xl font-black text-slate-900 leading-none">₹{trip.price.toLocaleString()}</p>
+                                                    <p className="text-2xl font-black text-slate-900 leading-none">₹{item.tripId.price.toLocaleString()}</p>
                                                     <p className={`text-[10px] font-bold uppercase tracking-widest mt-2 ${item.type === 'JOINED' ? 'text-emerald-500' : 'text-slate-400'}`}>
                                                         {item.type === 'JOINED' ? 'Paid & Booked' : 'Saved Plan'}
                                                     </p>
@@ -175,11 +179,11 @@ const HistoryPage = () => {
                                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-6 border-y border-slate-100">
                                                 <div>
                                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Departure</p>
-                                                    <p className="text-sm font-bold text-slate-800">{new Date(trip.startDate).toLocaleDateString()}</p>
+                                                    <p className="text-sm font-bold text-slate-800">{new Date(item.tripId.startDate).toLocaleDateString()}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Travel Mode</p>
-                                                    <p className="text-sm font-bold text-slate-800">{trip.transportMode}</p>
+                                                    <p className="text-sm font-bold text-slate-800">{item.tripId.transportMode}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Ref ID</p>
@@ -187,13 +191,13 @@ const HistoryPage = () => {
                                                 </div>
                                                 <div>
                                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Agency</p>
-                                                    <p className="text-sm font-bold text-slate-800">{trip.description?.includes('Organized by') ? trip.description.split('.')[0].replace('Organized by ', '') : 'InexTrip'}</p>
+                                                    <p className="text-sm font-bold text-slate-800">{item.tripId.description?.includes('Organized by') ? item.tripId.description.split('.')[0].replace('Organized by ', '') : 'InexTrip'}</p>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="flex gap-4 mt-8">
-                                            <Link to={`/trip/${trip.id}`} className="flex-1 text-center bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-xs">View Full Details</Link>
+                                            <Link to={`/trip/${item.tripId._id}`} className="flex-1 text-center bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-xs">View Full Details</Link>
                                             <button className="px-8 bg-slate-50 text-slate-500 border border-slate-100 rounded-2xl font-bold hover:bg-slate-100 transition-all uppercase tracking-widest text-[10px]">Support</button>
                                         </div>
                                     </div>

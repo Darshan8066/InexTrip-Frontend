@@ -1,31 +1,22 @@
 
 import React, { useState } from 'react';
-// import { apiService } from '../services/apiService';
-// import { Trip, User, Payment } from '../types';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-// import ProfileSidebar from '../components/ProfileSidebar';
 import { useEffect } from 'react';
-import { fetchUser, fetchUserById } from '../../services/authService';
-import { fetchTrip } from '../../services/tripServices';
-import { fetchPayment } from '../../services/paymentService';
 import ProfileSidebar from '../../component/ProfileSidebar';
 import AdminSidebar from '../../component/admin/AdminSidebar';
+import AdminHeader from '../../component/admin/AdminHeader';
+import { useAuth } from '../../context/AuthContext';
 import { fetchAdminStats } from '../../services/adminService';
 
 
 const AdminDashboard = ({ onLogout }) => {
 
     const navigate = useNavigate();
-
+    const { user } = useAuth();
     const [isSidebarVisible, setSidebarVisible] = useState(true);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-    const [users, setUsers] = useState([]);
-    const [trips, setTrips] = useState([]);
-    const [payments, setPayments] = useState([]);
     const [statsData, setStatsData] = useState(null);
-    const [user, setUser] = useState(null);
 
     const [loading, setLoading] = useState(true);
 
@@ -34,19 +25,9 @@ const AdminDashboard = ({ onLogout }) => {
         const loadData = async () => {
             try {
 
-                const [u, t, p, userData] = await Promise.all([
-                    fetchUser(),
-                    fetchTrip(),
-                    fetchPayment(),
-                    // fetchAdminStats(),
-                    fetchUserById()
-                ]);
-                console.log("user data : ", u);
-                setUsers(u?.user || []);
-                setTrips(t?.trip || []);
-                setPayments(p?.payments || []);
-                // setStatsData(s);
-                setUser(userData?.user || null);
+                const response = await fetchAdminStats();
+                setStatsData(response)
+                console.log(response)
 
             } catch (err) {
                 console.error("Failed to load admin data", err);
@@ -60,32 +41,26 @@ const AdminDashboard = ({ onLogout }) => {
     }, []);
 
     const totalRevenue = statsData?.totalRevenue || 0;
-
-    const chartData = statsData?.monthlyRevenue || [
-        { name: "Week 1", revenue: totalRevenue * 0.15 },
-        { name: "Week 2", revenue: totalRevenue * 0.25 },
-        { name: "Week 3", revenue: totalRevenue * 0.40 },
-        { name: "Week 4", revenue: totalRevenue * 1.0 },
-    ];
+    console.log("totalRevenue :", totalRevenue)
 
     const stats = [
         {
             label: "Total Explorers",
-            value: users?.length || 0,
+            value: statsData?.totalUsers || 0,
             color: "text-blue-600",
             icon: "👥",
             path: "/admin/users"
         },
         {
             label: "Inventory Size",
-            value: trips?.length || 0,
+            value: statsData?.totalTrips || 0,
             color: "text-orange-600",
             icon: "🧳",
             path: "/admin/trips"
         },
         {
             label: "Total Revenue",
-            value: `₹${totalRevenue.toLocaleString()}`,
+            value: `₹${statsData?.totalRevenue || 0}`,
             color: "text-emerald-600",
             icon: "📈",
             path: "/admin/payments"
@@ -109,46 +84,16 @@ const AdminDashboard = ({ onLogout }) => {
             <AdminSidebar isSidebarVisible={isSidebarVisible} />
 
             {/* Main Content */}
-            <main className="flex-grow overflow-x-hidden">
-                <header className="bg-white border-b border-slate-200 p-8 flex justify-between items-center sticky top-0 z-40 backdrop-blur-md bg-white/90">
-                    <div className="flex items-center gap-6">
-                        <button
-                            onClick={() => setSidebarVisible(!isSidebarVisible)}
-                            className="p-3 bg-slate-50 hover:bg-slate-100 rounded-2xl transition-all flex flex-col gap-1 items-center justify-center w-12 h-12"
-                        >
-                            <span className={`w-6 h-0.5 bg-slate-900 rounded-full transition-all ${!isSidebarVisible ? 'rotate-0' : ''}`} />
-                            <span className="w-4 h-0.5 bg-slate-900 rounded-full" />
-                            <span className="w-6 h-0.5 bg-slate-900 rounded-full" />
-                        </button>
-                        <div>
-                            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Command Center</h1>
-                            <p className="text-slate-400 font-bold uppercase text-[9px] tracking-widest mt-1">Live Operational Hub</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => setIsProfileOpen(true)}
-                            className="flex items-center gap-4 bg-slate-50 p-2 pl-4 rounded-2xl border border-slate-200 hover:border-indigo-300 transition-all group"
-                        >
-                            <div className="text-right hidden sm:block">
-                                <p className="text-slate-900 font-black text-xs group-hover:text-indigo-600 transition-colors">{user?.fullname}</p>
-                                <p className="text-indigo-600 text-[8px] font-black uppercase tracking-widest">Master Node</p>
-                            </div>
-                            {/* <img src={user?.profilePhoto} className="w-10 h-10 rounded-xl border-2 border-white shadow-md" alt="Admin" /> */}
+            <main className="flex-grow ">
 
-                            {user?.profilePhoto ? (
-                                <img
-                                    src={user.profilePhoto}
-                                    className="w-10 h-10 rounded-xl border-2 border-white shadow-md"
-                                />
-                            ) : (
-                                <div className="w-10 h-10 text-xl rounded-xl border-1 border-black bg-indigo-600 text-white flex items-center justify-center font-bold">
-                                    {user?.fullname?.charAt().toUpperCase()}
-                                </div>
-                            )}
-                        </button>
-                    </div>
-                </header>
+                {/* Admin HEader */}
+                <AdminHeader
+                    title="Command Center"
+                    subtitle="Live Operational Hub"
+                    user={user}
+                    onProfileClick={() => setIsProfileOpen(true)}
+                    onToggleSidebar={() => setSidebarVisible(!isSidebarVisible)}
+                />
 
                 <div className="p-8 space-y-8 max-w-7xl mx-auto">
                     {/* Stats Cards - CLICKABLE */}
@@ -177,7 +122,7 @@ const AdminDashboard = ({ onLogout }) => {
                             </h3>
                             <div className="h-[350px]">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={chartData}>
+                                    <AreaChart data={statsData?.monthlyRevenue}>
                                         <defs>
                                             <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.1} />

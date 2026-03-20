@@ -50,7 +50,7 @@ const PaymentPage = () => {
       const payment = {
         id: `pay-${Date.now()}`,
         userId: user._id,
-        tripId: trip._id,
+        tripId: tripId,
         amount: amount,
         paymentMethod: method,
         transactionId: generatedTxn,
@@ -58,19 +58,8 @@ const PaymentPage = () => {
         date: new Date()
       };
 
-      const history = {
-        id: `hist-${Date.now()}`,
-        userId: user._id,
-        tripId: trip._id,
-        paymentId: payment.id,
-        type: 'JOINED',
-        date: new Date()
-      };
-      // console.log("payment : ", payment)
-      // console.log("history : ", history)
-      await savePayment(payment);
-      await saveHistory(history);
-      console.log("saveHistory:",history )
+
+    await savePayment(payment);
 
       setSuccess(true);
     } catch (err) {

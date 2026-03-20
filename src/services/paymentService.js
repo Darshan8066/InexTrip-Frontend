@@ -33,8 +33,8 @@ export const fetchPaymentByUserId = async () => {
 
 export const savePayment = async (paymentData) => {
     try {
-        
-        const res = await axios.post("/payments/save", paymentData);
+
+        const res = await axios.post("/payments/create", paymentData);
         return res.data;
 
     } catch (error) {

@@ -6,7 +6,6 @@ import Footer from '../component/Footer';
 import TripCard from '../component/TripCard';
 import useTrips from '../hooks/useTrips';
 
-
 import { Link, useNavigate } from 'react-router-dom';
 import { categoriesConst } from '../constants/categories';
 import CategorySection from '../component/CategorySection';
@@ -17,30 +16,21 @@ const Home = ({ onLogout }) => {
   const navigate = useNavigate();
 
   const { trips, loading, error } = useTrips();
+  const { user } = useAuth();
 
   const [activeCategory, setActiveCategory] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
 
-  //  const user = JSON.parse(localStorage.getItem("user"));
-  // console.log("activeCategory",activeCategory)
 
-  const { user } = useAuth();
-  // if (loading) {
-  //   return <div className="text-center py-20">Loading trips...</div>;
-  // }
+  if (loading) {
+    return <div className="text-center py-20">Loading trips...</div>;
+  }
 
   if (error) {
     return <div className="text-center py-20 text-red-500">{error}</div>;
   }
 
-
-  // const getTripsByCategory = (cat) => {
-  //   return trip?.filter(t => t.description?.toLowerCase().includes(`category: ${cat.toLowerCase()}`)).slice(0, 8);
-  // };
-
-
   const categories = categoriesConst;
-
 
 
   return (
@@ -108,32 +98,32 @@ const Home = ({ onLogout }) => {
 
         {/* Tripping Lists by Category as per request */}
         <div className="space-y-32 py-32 bg-gray-200">
-          {/* {(activeCategory? [categories.find] : categories).map((cat) => ( */}
-          {/* {(activeCategory
-            ? [categories.find(c => c.name === activeCategory)]
-            : categories
-          ).map((cat) => (
-            <section key={cat.name} id={`section-${cat.name.toLowerCase()}`} className="max-w-7xl mx-auto px-6">
-              <CategorySection
-                cat={cat}
-                activeCategory={activeCategory}
-                setActiveCategory={setActiveCategory}
-                trips={trip}
-                user={user}
-              />
-            </section>
-          ))} */}
           {(activeCategory
             ? [categories.find(c => c.name === activeCategory)]
             : categories
           ).map((cat) => (
             <section key={cat.name} id={`section-${cat.name.toLowerCase()}`} className="max-w-7xl mx-auto px-6">
-              <CategorySection
-                cat={cat}   // ✅ FIXED
+              {/* <CategorySection
+                cat={cat} 
                 activeCategory={activeCategory}
                 setActiveCategory={setActiveCategory}
                 trips={trips}
                 user={user}
+              /> */}
+
+              <CategorySection
+                cat={cat}
+                activeCategory={activeCategory}
+                setActiveCategory={setActiveCategory}
+                trips={trips}
+                user={user}
+                onBookClick={() => {
+                  if (!user) {
+                    setShowLoginPopup(true);
+                  } else {
+                    navigate("/booking"); // or whatever route
+                  }
+                }}
               />
             </section>
           ))}

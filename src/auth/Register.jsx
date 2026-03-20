@@ -33,7 +33,7 @@ const Register = () => {
             .required("Phone is required"),
     })
 
-    const { handleSubmit, handleBlur, handleChange, }
+    const { handleSubmit, handleBlur, handleChange, errors, touched }
         = useFormik({
 
             initialValues: myintitalvalue,
@@ -57,7 +57,7 @@ const Register = () => {
 
     return (
         <div className="min-h-screen  flex items-center justify-center p-2" >
-            <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/doug6jcc5/image/upload/v1771665110/tripplanner/krwm2ogbv0tgjrqs8fp3.jpg')] bg-cover bg-center"></div>
+            <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/doug6jcc5/image/upload/v1774001638/register1_yetkow.jpg')] bg-cover bg-center"></div>
 
             {/* Blur Overlay */}
             <div className="absolute inset-0 backdrop-blur-md bg-black/20" />
@@ -66,7 +66,7 @@ const Register = () => {
                 {/* Left Side: Branding */}
                 <div className="md:w-1/2 relative overflow-hidden group">
                     <img
-                        src="https://res.cloudinary.com/doug6jcc5/image/upload/v1771665307/tripplanner/uarldckivkgcxmpqys4d.jpg"
+                        src="https://res.cloudinary.com/doug6jcc5/image/upload/v1774001648/register2_msivp8.jpg"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 "
                         alt="Travel"
                     />
@@ -132,7 +132,9 @@ const Register = () => {
                                 placeholder="Mobile Number"
                                 className="w-full bg-transparent text-white outline-none placeholder:text-white/40 font-medium py-2"
                             />
-
+                            {touched.mobile && errors.mobile ? (
+                                <p>{errors.mobile}</p>
+                            ) : null}
 
                             <span className="absolute right-0 top-2 opacity-100">📱</span>
                         </div>

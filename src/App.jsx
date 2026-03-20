@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Home from './pages/Home';
 import Dashboard from './pages/user/UserDashboard';
-import EditProfile from './component/EditProfile';
+import EditProfile from './component/user/EditProfile';
 import TripDetails from './pages/user/TripDetails';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './component/ProtectedRoute';
@@ -17,6 +17,9 @@ import TripForm from './component/admin/TripForm';
 import AdminPayments from './pages/admin/AdminPayments';
 import PaymentPage from './pages/user/PaymentPage';
 import HistoryPage from './pages/user/HistoryPage';
+import Favourites from './pages/user/Favourites';
+import JoinTrip from './pages/user/JoinTrip';
+import AdminReviews from './pages/admin/AdminReviews';
 
 function App() {
 
@@ -29,6 +32,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          {/* <Route path="/user/dashboard" element={<Dashboard />} /> */}
 
 
 
@@ -42,6 +46,8 @@ function App() {
           <Route path='/trip/:id' element={<TripDetails />} />
           <Route path='/edit-profile' element={<EditProfile />} />
           <Route path='/history' element={<HistoryPage />} />
+          <Route path='/favourites' element={<Favourites />} />
+          <Route path='/join-trip' element={<JoinTrip />} />
 
 
           {/* Admin Routes */}
@@ -59,6 +65,7 @@ function App() {
           <Route path='/admin/trip-form' element={<TripForm />} />
           <Route path='/admin/payments' element={<AdminPayments />} />
           <Route path='/payments' element={<AdminPayments />} />
+          <Route path='/admin/reviews' element={<AdminReviews />} />
 
           {/* <Route path='/counter' element={<Counter />} /> */}
           {/* <Route path='/admin/create-trip' element={<AdminCreateTrip />} />

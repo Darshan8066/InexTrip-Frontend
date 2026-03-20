@@ -2,20 +2,8 @@ import React, { useState } from 'react'
 import TripCard from './TripCard';
 import { Link } from 'react-router-dom';
 
-export default function CategorySection({ user, trips, setActiveCategory, activeCategory, cat }) {
-
-    const [showLoginPopup, setShowLoginPopup] = useState(false);
-
-    // const getTripsByCategory = (cat) => {
-    //     return trips?.filter(t => t.description?.toLowerCase().includes(`category: ${cat?.toLowerCase()}`)).slice(0, 8);
-    // };
-
-    // const getTripsByCategory = (catName) => {
-    //     return trips?.filter(t => {
-    //         console.log("Trip category:", t.category);
-    //         return t.category?.toLowerCase().trim() === catName?.toLowerCase().trim();
-    //     }).slice(0, 8);
-    // };
+// export default function CategorySection({ user, trips, setActiveCategory, activeCategory, cat }) {
+export default function CategorySection({ user, trips, setActiveCategory, activeCategory, cat, onBookClick }) {
 
     const getTripsByCategory = (catName) => {
         if (!catName) return [];
@@ -27,11 +15,6 @@ export default function CategorySection({ user, trips, setActiveCategory, active
             )
             .slice(0, 8);
     };
-
-    const handleUnauthClick = () => setShowLoginPopup(true);
-
-    // console.log("Selected Category:", cat?.name);
-    // console.log("Trips Data:", trips);
 
     return (
         <div>
@@ -62,11 +45,11 @@ export default function CategorySection({ user, trips, setActiveCategory, active
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 {getTripsByCategory(cat?.name).map(trip => (
                     <TripCard
-                        key={trip.id}
+                        key={trip._id}
                         trip={trip}
                         isAuthenticated={!!user}
                         currentUser={user}
-                        onBookClick={handleUnauthClick}
+                        onBookClick={onBookClick}
                         onRefresh={() => { }}
                     />
                 ))}

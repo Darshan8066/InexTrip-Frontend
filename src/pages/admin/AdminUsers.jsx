@@ -9,6 +9,7 @@ import { deleteUserbyId, fetchUser, fetchUserById } from '../../services/authSer
 import { fetchauditUser } from '../../services/auditService';
 import AdminSidebar from '../../component/admin/AdminSidebar';
 import { useAuth } from '../../context/AuthContext';
+import AdminHeader from '../../component/admin/AdminHeader';
 
 const AdminUsers = ({ onLogout }) => {
     const navigate = useNavigate();
@@ -64,40 +65,14 @@ const AdminUsers = ({ onLogout }) => {
 
             <AdminSidebar isSidebarVisible={isSidebarVisible} />
             <main className="flex-grow">
-                <header className="p-8 border-b border-slate-200 flex justify-between items-center bg-white/90 backdrop-blur-md sticky top-0 z-40">
-                    <div className="flex items-center gap-6">
-                        <button
-                            onClick={() => setSidebarVisible(!isSidebarVisible)}
-                            className="p-3 bg-slate-50 hover:bg-slate-100 rounded-2xl transition-all flex flex-col gap-1 items-center justify-center w-12 h-12"
-                        >
-                            <span className="w-6 h-0.5 bg-slate-900 rounded-full" />
-                            <span className="w-4 h-0.5 bg-slate-900 rounded-full" />
-                            <span className="w-6 h-0.5 bg-slate-900 rounded-full" />
-                        </button>
-                        <div>
-                            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Explorer Registry</h1>
-                            <p className="text-slate-400 font-bold uppercase text-[9px] tracking-widest mt-1">Population: {users?.length} Nodes</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <button onClick={() => navigate('/register')} className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-black text-[10px] hover:bg-indigo-700 uppercase tracking-widest shadow-xl transition-all">Manual Enrollment</button>
-                        <button onClick={() => setIsProfileOpen(true)} className="w-10 h-10 rounded-xl border-2 border-white shadow-md overflow-hidden">
-
-                            {user?.profilePhoto ? (
-                                <img
-                                    src={user?.profilePhoto}
-                                    className="w-full h-full border border-blue-600  object-cover"
-                                />
-                            ) : (
-                                <div className="w-full h-full  bg-indigo-600 border border-blue-600  text-white flex items-center justify-center font-bold">
-                                    {user?.fullname?.charAt().toUpperCase()}
-
-                                </div>
-                            )}
-
-                        </button>
-                    </div>
-                </header>
+                <AdminHeader
+                    title="Explorer Registry"
+                    subtitle={`Total Users: ${users.length}`}
+                    user={user}
+                    isSidebarVisible={isSidebarVisible}
+                    setSidebarVisible={setSidebarVisible}
+                    setIsProfileOpen={setIsProfileOpen}
+                ></AdminHeader>
 
                 <div className="p-8">
                     <div className="bg-white rounded-[40px] border border-slate-200 overflow-hidden shadow-sm">
