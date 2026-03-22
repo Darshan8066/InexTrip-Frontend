@@ -24,6 +24,7 @@
     "react-router-dom": "^7.13.0",
     "recharts": "^3.7.0",
     "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.26.24",
     "tailwindcss": "^4.1.18",
     "yup": "^1.7.1"
   },

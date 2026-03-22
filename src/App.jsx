@@ -22,7 +22,8 @@ import AdminReviews from './pages/admin/AdminReviews';
 import Loading from './pages/Loading';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast'
-import { swal } from 'sweetalert';
+// import { swal } from 'sweetalert';
+// import  Swal  from 'sweetalert2'
 
 function App() {
 
@@ -40,7 +41,8 @@ function App() {
   return (
     <>
       < Toaster position="top-center" />
-      <swal />
+      {/* <swal /> */}
+      {/* <new Swal /> */}
 
       {isloading ? (
         <Loading />

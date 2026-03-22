@@ -127,15 +127,9 @@ const Register = () => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 type="tel"
-                                // value={formData.mobile}
-                                // onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
                                 placeholder="Mobile Number"
                                 className="w-full bg-transparent text-white outline-none placeholder:text-white/40 font-medium py-2"
                             />
-                            {/* {touched.mobile && errors.mobile ? (
-                                <p>{errors.mobile}</p>
-                            ) : null} */}
-                           {toast.error(errors.mobile)}
 
                             <span className="absolute right-0 top-2 opacity-100">📱</span>
                         </div>
@@ -158,6 +152,11 @@ const Register = () => {
                                 {showPassword ? "HIDE" : "SHOW"}
                             </button>
                         </div>
+
+                        {touched.fullname && errors.fullname ? (<p>{errors.fullname}</p>) : null}
+                        {touched.email && errors.email ? (<p>{errors.email}</p>) : null}
+                        {touched.mobile && errors.mobile ? (<p>{errors.mobile}</p>) : null}
+                        {touched.password && errors.password ? (<p>{errors.password}</p>) : null}
 
                         <button
                             type="submit"
