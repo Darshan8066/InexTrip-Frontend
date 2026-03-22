@@ -11,14 +11,14 @@ const Loading = () => {
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTextIndex((prev) => (prev + 1) % loadingTexts.length);
+    const timer = setTimeout(() => {
+      setIsLoading(false)
     }, 3000);
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1, ease: "easeInOut" }}
@@ -26,11 +26,11 @@ const Loading = () => {
     >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <motion.img 
+        <motion.img
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
-          src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&q=80&w=2070" 
+          src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&q=80&w=2070"
           className="w-full h-full object-cover blur-sm"
           alt="India Landscape"
           referrerPolicy="no-referrer"
@@ -49,7 +49,7 @@ const Loading = () => {
           <div className="inline-block px-6 py-2 bg-indigo-600/20 backdrop-blur-md border border-indigo-400/30 rounded-full text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8 shadow-xl">
             InexTrip-A Smart Trip Planning System
           </div>
-          
+
           <h1 className="text-5xl md:text-8xl font-black text-white mb-8 leading-[0.85] tracking-tighter">
             <span className="block mb-2">Trip </span>
             <span className="block bg-gradient-to-r from-indigo-400 via-blue-300 to-emerald-300 bg-clip-text text-transparent">
@@ -76,7 +76,7 @@ const Loading = () => {
                 {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
-                    animate={{ 
+                    animate={{
                       width: textIndex === i ? 32 : 8,
                       backgroundColor: textIndex === i ? "#6366f1" : "rgba(255,255,255,0.2)"
                     }}
@@ -90,7 +90,7 @@ const Loading = () => {
 
         {/* Progress Bar */}
         <div className="mt-16 w-64 h-1 bg-white/10 rounded-full overflow-hidden relative">
-          <motion.div 
+          <motion.div
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
             transition={{ duration: 3, ease: "easeInOut" }}

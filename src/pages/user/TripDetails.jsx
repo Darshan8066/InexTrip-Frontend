@@ -325,27 +325,27 @@ const TripDetails = () => {
                             </div>
                         </div>
                         <div id="related-scroll" className="flex overflow-x-auto pb-8 gap-8 no-scrollbar snap-x scroll-smooth">
-                            {relatedTrips.map((rTrip) => (
+                            {relatedTrips.map((Trip) => (
                                 <Link
-                                    key={rTrip.id}
-                                    to={`/trip/${rTrip.id}`}
+                                    key={Trip.id}
+                                    to={`/trip/${Trip.id}`}
                                     className="min-w-[320px] md:min-w-[400px] bg-white rounded-[48px] overflow-hidden border border-slate-100 shadow-xl hover:shadow-2xl transition-all snap-start group"
                                 >
                                     <div className="h-56 overflow-hidden relative">
-                                        <img src={rTrip.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={rTrip.to} />
+                                        <img src={Trip.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={Trip.to} />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                                         <div className="absolute bottom-6 left-8 text-white">
-                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-1">{rTrip.from} to</p>
-                                            <h4 className="text-2xl font-black tracking-tight">{rTrip.to}</h4>
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-1">{Trip.from} to</p>
+                                            <h4 className="text-2xl font-black tracking-tight">{Trip.to}</h4>
                                         </div>
                                         <div className="absolute top-6 right-6 bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/30 text-white text-[10px] font-black uppercase tracking-widest">
-                                            {rTrip.dayPlan.length} Days
+                                            {Trip.dayPlan.length} Days
                                         </div>
                                     </div>
                                     <div className="p-8 flex justify-between items-center">
                                         <div className="space-y-1">
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Starting From</p>
-                                            <p className="text-2xl font-black text-indigo-600">₹{rTrip.price.toLocaleString()}</p>
+                                            <p className="text-2xl font-black text-indigo-600">₹{Trip.price.toLocaleString()}</p>
                                         </div>
                                         <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                             &rarr;
