@@ -179,7 +179,7 @@ const AdminReviews = ({ onLogout }) => {
                         </div>
                       </div>
                       <div className="bg-slate-50 px-3 py-1.5 rounded-xl text-[8px] font-black text-slate-400 uppercase tracking-widest">
-                        {new Date(review.date).toLocaleDateString()}
+                        {new Date(review.date).toLocaleDateString('en-GB')}
                       </div>
                     </div>
 
@@ -191,7 +191,7 @@ const AdminReviews = ({ onLogout }) => {
                       </div>
                       <h5 className="text-sm font-black text-slate-800 mb-4 line-clamp-1">{review.tripId}</h5>
                       {/* <h5 className="text-sm font-black text-slate-800 mb-4 line-clamp-1">{getTripName(review.tripId)}</h5> */}
-                      <p className="text-slate-500 font-bold text-sm leading-relaxed italic line-clamp-3">
+                      <p className="text-slate-500 font-bold text-sm leading-relaxed  line-clamp-3">
                         "{review.comment}"
                       </p>
                     </div>

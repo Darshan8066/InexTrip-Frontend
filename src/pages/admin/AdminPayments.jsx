@@ -34,24 +34,6 @@ const AdminPayments = ({ onLogout }) => {
         loadData();
     }, []);
 
-    // const handleExportData = async () => {
-    //     try {
-    //         const data = await fetchPaymentByUserId();
-    //         const blob = new Blob([data], { type: 'application/json' });
-    //         const url = URL.createObjectURL(blob);
-    //         const link = document.createElement('a');
-    //         link.href = url;
-    //         link.download = `TripPlanner_Ledger_Node_${Date.now()}.json`;
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         document.body.removeChild(link);
-    //         URL.revokeObjectURL(url);
-    //         alert("Financial Ledger Node data exported successfully.");
-    //     } catch (err) {
-    //         alert(err.message);
-    //     }
-    // };
-
     return (
         <div className="min-h-screen bg-slate-50 flex text-slate-900">
             {/* Sidebar - TOGGLEABLE */}
@@ -100,7 +82,7 @@ const AdminPayments = ({ onLogout }) => {
                                                     </div>
                                                 </td>
                                                 <td className="px-8 py-6 font-black text-slate-900 text-lg tracking-tight">₹{p.amount.toLocaleString()}</td>
-                                                <td className="px-8 py-6 text-[9px] font-bold text-slate-400 uppercase tracking-widest">{new Date(p.date).toLocaleString()}</td>
+                                                <td className="px-8 py-6 text-[9px] font-bold text-slate-400 uppercase tracking-widest">{new Date(p.date).toLocaleDateString('en-GB')}</td>
                                                 <td className="px-8 py-6 text-right">
                                                     <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-lg text-[8px] font-black uppercase tracking-widest">Verified</span>
                                                 </td>

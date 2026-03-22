@@ -132,9 +132,10 @@ const Register = () => {
                                 placeholder="Mobile Number"
                                 className="w-full bg-transparent text-white outline-none placeholder:text-white/40 font-medium py-2"
                             />
-                            {touched.mobile && errors.mobile ? (
+                            {/* {touched.mobile && errors.mobile ? (
                                 <p>{errors.mobile}</p>
-                            ) : null}
+                            ) : null} */}
+                           {toast.error(errors.mobile)}
 
                             <span className="absolute right-0 top-2 opacity-100">📱</span>
                         </div>

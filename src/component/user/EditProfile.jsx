@@ -129,33 +129,6 @@ const EditProfile = ({ onLogout }) => {
         const previewUrl = URL.createObjectURL(file);
         formik.setFieldValue("profilePhoto", previewUrl);
     };
-    // const handleFileChange = async (e) => {
-    //     const file = e.target.files?.[0];
-    //     console.log("File :", file)
-    //     if (!file) return;
-
-    //     const formData = new FormData();
-    //     formData.append("image", file);
-    //     console.log("image", formData);
-
-    //     try {
-
-    //         const uploadRes = await axios.post("/upload/upload", formData, {
-    //             headers: {
-    //                 "Content-Type": "multipart/form-data"
-    //             }
-    //         });             // Upload to Cloudinary
-
-    //         const imageUrl = uploadRes.data.imageUrl;
-
-    //         formik.setFieldValue("profilePhoto", imageUrl);         // Only update Formik value (NOT database)
-    //         toast.success("Photo ready. Click Update to save.");
-
-    //     } catch (error) {
-    //         console.log(error);
-    //         toast.error("Photo upload failed");
-    //     }
-    // };
     if (loading) return <div className="text-center py-20">Loading...</div>;         // If data still loading show loader
 
     return (
@@ -283,7 +256,7 @@ const EditProfile = ({ onLogout }) => {
                                     type="email"
                                     value={formik.values.email}
                                     disabled
-                                    className="w-full px-4 py-3 text-black bg-gray-100 rounded-xl"
+                                    className="w-full cursor-not-allowed  px-4 py-3 text-black bg-gray-100 rounded-xl"
                                 />
                             </div>
 

@@ -88,8 +88,8 @@ const TripCard = ({ trip, isAuthenticated, onBookClick }) => {
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex justify-between items-center mb-6">
           <div className="text-[10px] font-bold text-black uppercase tracking-widest">
-            <span className="block">{new Date(trip.startDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}</span>
-            <span>{new Date(trip.endDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            <span className="block">{new Date(trip.startDate).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' })}</span>
+            <span>{new Date(trip.endDate).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
           </div>
           <div className="text-right">
             <p className="text-2xl font-black text-black leading-none">₹{trip.price.toLocaleString()}</p>

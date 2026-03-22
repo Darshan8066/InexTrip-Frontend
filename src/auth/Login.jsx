@@ -6,6 +6,9 @@ import { string, object } from 'yup'
 import { login } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import swal from 'sweetalert';
+
+
 
 
 const Login = () => {
@@ -35,11 +38,22 @@ const Login = () => {
         setUser(res.user);
         if (res.user.role === 'USER') navigate('/user/dashboard');
         else navigate('/admin/dashboard');
-        toast.success("Login Successfully")
+        swal({
+          title: "Good job!",
+          text:res.message ,
+          icon: "success",
+          button: " Yes",
+        });
       } catch (error) {
         console.log(error)
+        swal({
+          title: "Error",
+          text:error.message,
+          icon: "error",
+          button: " Yes",
+        });
       }
-   
+
 
     }
   })

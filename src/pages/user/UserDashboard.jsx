@@ -82,7 +82,7 @@ const Dashboard = ({ onLogout }) => {
 
             {/* Right: Plan Text */}
             <div className="max-w-xl text-center md:text-left">
-              <h1 className="text-4xl font-black text-slate-900 mb-6 italic italic-indigo">Plan your journey your way!</h1>
+              <h1 className="text-4xl font-black text-slate-900 mb-6 indigo">Plan your journey your way!</h1>
               <p className="text-sm text-slate-600 font-medium leading-relaxed">
                 Our Trip Planner lets you create a personalized trip easily. Just select your start and destination, travel dates, budget, and transport mode. The system organizes everything for you, helping you save time and enjoy a smooth, stress-free journey.
               </p>
@@ -94,7 +94,7 @@ const Dashboard = ({ onLogout }) => {
         <section className="relative rounded-[40px] h-[600px] overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&q=80&w=2070"
-            className="w-full h-full blur-sm object-cover brightness-[0.7] scale-105"
+            className="w-full h-full blur-sm object-cover brightness-[0.5] scale-105"
             alt="Mountains and Skies"
           />
 

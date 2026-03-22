@@ -154,7 +154,7 @@ const HistoryPage = () => {
                             // if (!trip) return null;
 
                             return (
-                                <div key={item._id} className="bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl border border-slate-100 flex flex-col md:flex-row transition-all group border-l-8 border-l-indigo-600">
+                                <div key={item._id} className="bg-white rounded-[40px] overflow-hidden shadow-sm  border border-slate-100 flex flex-col md:flex-row transition-all group ">
                                     <div className="md:w-80 h-48 md:h-auto overflow-hidden relative">
                                         <img src={item.tripId.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                                         <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black text-indigo-600 uppercase tracking-widest shadow-md">
@@ -179,7 +179,7 @@ const HistoryPage = () => {
                                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-6 border-y border-slate-100">
                                                 <div>
                                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Departure</p>
-                                                    <p className="text-sm font-bold text-slate-800">{new Date(item.tripId.startDate).toLocaleDateString()}</p>
+                                                    <p className="text-sm font-bold text-slate-800">{new Date(item.tripId.startDate).toLocaleDateString('en-GB')}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Travel Mode</p>

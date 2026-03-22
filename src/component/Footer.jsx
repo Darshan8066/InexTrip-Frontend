@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="space-y-8">
             <Link to="/" className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-2xl shadow-indigo-500/20">T</div>
-              <span className="text-2xl font-black text-white tracking-tighter italic">TripPlanner <span className="text-indigo-500">AI</span></span>
+              <span className="text-2xl font-black text-white tracking-tighter">TripPlanner <span className="text-indigo-500">AI</span></span>
             </Link>
             <p className="text-slate-500 font-medium leading-relaxed text-sm">
               Architecting the future of travel. We merge artificial intelligence with regional expertise to curate journeys that nourish the soul and ignite the spirit of adventure.

@@ -18,7 +18,7 @@ const Navbar = ({ onLogout }) => {
     { label: 'Home', path: user ? '/user/dashboard' : '/' },
     { label: 'Create Trip', path: '/create-trip' },
     { label: 'Join Trip', path: '/join-trip' },
-    { label: 'Destinations', path: '/destinations' },
+      
     { label: 'History', path: '/history' },
   ];
 
@@ -69,7 +69,7 @@ const Navbar = ({ onLogout }) => {
                 onClick={() => navigate(btn.path)}
                 className={`px-5 py-3 rounded-2xl font-black text-xs transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] border border-white/20 uppercase tracking-widest ${location.pathname === btn.path
                   ? ' hover:bg-blue-700 translate-y-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)]'
-                  : 'px-5 py-3 rounded-2xl font-black text-xs transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] border border-white/20 uppercase tracking-widest  hover:bg-blue-700 translate-y-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)]'
+                  : 'px-5 py-3 rounded-2xl font-black text-xs transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] border border-white/20 uppercase tracking-widest hover:bg-blue-700 translate-y-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)]'
 
                   }`}
               >
