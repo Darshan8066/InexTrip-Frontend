@@ -20,7 +20,6 @@ const TripDetails = () => {
     const [showGallery, setShowGallery] = useState(false);
     const [activeImage, setActiveImage] = useState(0);
     const [relatedTrips, setRelatedTrips] = useState([])
-
     const [newReview, setNewReview] = useState({ rating: 5, comment: '' });
     const [submittingReview, setSubmittingReview] = useState(false);
     const [reviews, setReviews] = useState([]);
@@ -28,7 +27,7 @@ const TripDetails = () => {
     const allTrips = async () => {
         const res = await fetchTripById(id);
         const review_res = await fetchReviewByTripId(id);
-        console.log("TripDetails : ", res.trip)
+        // console.log("TripDetails : ", res.trip)
         console.log("review response : ", review_res.reviews)
         setReviews(review_res.reviews);
         setTrip(res.trip)
@@ -37,17 +36,14 @@ const TripDetails = () => {
     useEffect(() => {
         if (trip && trips.length > 0) {
             const data = trips.filter(f => f.category === trip.category && f._id !== trip._id);
-            console.log("filterdata:", data);
+            // console.log("filterdata:", data);
             setRelatedTrips(data);
         }
     }, [trip, trips]);
 
-
     useEffect(() => {
         allTrips();
     }, [id])
-
-
 
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
@@ -74,8 +70,17 @@ const TripDetails = () => {
 
             const res = await createReview(reviewData);
 
-            // ✅ Correct way
-            setReviews((prev) => [res.review, ...prev]);
+
+            const reviewWithUser = {
+                ...res.review,
+                fullname: user.fullname,
+                profilePhoto: user.profilePhoto
+            };
+
+            console.log("reviewWithUser : ", reviewWithUser)
+
+            setReviews((prev) => [reviewWithUser, ...prev]);
+            // setReviews((prev) => [res.review, ...prev]);
 
             setNewReview({ rating: 5, comment: '' });
 
@@ -93,41 +98,6 @@ const TripDetails = () => {
             setSubmittingReview(false);
         }
     };
-    // const handleReviewSubmit = async (e) => {
-    //     e.preventDefault();
-    //     if (!user) {
-    //         alert("Please login to give a review.");
-    //         navigate('/login');
-    //         return;
-    //     }
-    //     if (!trip) return;
-
-    //     if (!newReview.comment.trim()) {
-    //         alert("Please enter a comment.");
-    //         return;
-    //     }
-
-    //     setSubmittingReview(true);
-    //     try {
-    //         const review = {
-    //             tripId: id,
-    //             rating: newReview.rating,
-    //             comment: newReview.comment
-    //         };
-    //         console.log("review :", review)
-    //         const savedReview = await createReview(review);
-    //         setReviews([savedReview, ...review]);
-    //         // setNewReview({ rating: 5, comment: '' });
-    //         alert("Review posted successfully!");
-    //     } catch (err) {
-    //         console.error(err);
-    //         alert("Failed to post review");
-    //     } finally {
-    //         setSubmittingReview(false);
-    //     }
-    // };
-
-
 
     if (!trip) {
         return (
@@ -136,8 +106,6 @@ const TripDetails = () => {
             </div>
         );
     }
-
-
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col">
@@ -420,10 +388,51 @@ const TripDetails = () => {
                                             <div className="flex justify-between items-start mb-8">
                                                 <div className="flex items-center gap-4">
                                                     <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-lg">
-                                                        <img src={review.userId?.profilePhoto || user.profilePhoto} className="w-full h-full object-cover" alt={review.userId?.fullname || user.fullname} />
+                                                        {/* <img src={review.profilePhoto} className="w-full h-full object-cover" alt={review.fullname} /> */}
+
+                                                        {review.userId?.profilePhoto ? (
+                                                            <img
+                                                                src={review.userId?.profilePhoto}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            review.userId?.fullname ?
+                                                                (
+                                                                    <div className="w-full h-full text-2xl  font-black bg-indigo-600 text-white flex items-center justify-center">
+                                                                        {review?.userId?.fullname?.charAt(0).toUpperCase()}
+                                                                    </div>
+
+                                                                ) : (
+                                                                    <div className="w-full h-full text-2xl  font-black bg-indigo-600 text-white flex items-center justify-center">
+                                                                        {review?.fullname?.charAt(0).toUpperCase()}
+                                                                    </div>)
+
+                                                        )}
+
+                                                        {
+                                                            review.profilePhoto ?
+                                                                (
+                                                                    <img
+                                                                        src={review.profilePhoto}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-full h-full text-2xl  font-black bg-indigo-600 text-white flex items-center justify-center">
+                                                                        {review?.fullname?.charAt(0).toUpperCase()}
+                                                                    </div>
+                                                                )
+
+                                                        }
+
                                                     </div>
                                                     <div>
-                                                        <h4 className="font-black text-slate-900 tracking-tight">{review.userId?.fullname || user.fullname}</h4>
+                                                        {
+                                                            review.userId.fullname ?
+
+                                                                (<h4 className="font-black text-slate-900 tracking-tight">{review?.userId?.fullname}</h4>) :
+                                                                (<h4 className="font-black text-slate-900 tracking-tight">{review?.fullname}</h4>)
+
+                                                        }
                                                         <div className="flex text-amber-400 text-xs mt-1">
                                                             {Array.from({ length: 5 }).map((_, i) => (
                                                                 <span key={i} className={i < review.rating ? 'opacity-100' : 'opacity-20'}>★</span>
@@ -455,7 +464,6 @@ const TripDetails = () => {
                         </div>
                     </div>
                 </section>
-
             </main>
             <Footer />
         </div>

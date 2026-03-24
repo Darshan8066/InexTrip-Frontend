@@ -7,15 +7,9 @@ const Loading = () => {
   const loadingTexts = [
     "Discover the Incredible India",
     "Personalized adventures",
-    "Bookings powered by cutting-edge AI"
+    "Bookings powered by inexTrip"
   ];
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <motion.div

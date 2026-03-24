@@ -118,7 +118,7 @@ import { clearHistory } from '../services/historyService';
 
 
 
-const ProfileSidebar = ({ isOpen, onClose, onLogout }) => {
+const ProfileSidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
 

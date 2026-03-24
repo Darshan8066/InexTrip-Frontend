@@ -5,9 +5,8 @@ import { useFormik } from 'formik'
 import { string, object } from 'yup'
 import { login } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 import swal from 'sweetalert';
-
 
 
 
@@ -33,6 +32,8 @@ const Login = () => {
 
     onSubmit: async (value) => {
       try {
+
+        console.log("Login value",value)
         const res = await login(value);
         console.log("data:", res.user.role);
         setUser(res.user);
@@ -42,7 +43,6 @@ const Login = () => {
           title: "Good job!",
           text:res.message ,
           icon: "success",
-          button: " Yes",
         });
       } catch (error) {
         console.log(error)

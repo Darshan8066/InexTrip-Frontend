@@ -45,10 +45,10 @@ const Navbar = ({ onLogout }) => {
                     />
                   ) : (
                     <div className="w-full h-full rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
-                      {user?.fullname?.charAt().toUpperCase()}
+                      {user?.fullname?.charAt(0).toUpperCase()}
 
                     </div>
-                  )}
+                  )}    
 
                 </div>
 

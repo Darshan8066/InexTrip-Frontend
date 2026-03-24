@@ -15,7 +15,7 @@ export default function PackageValues({trip}) {
     const navigate = useNavigate();
     const { user } = useAuth();
     //  const trip = useParams.id;
-    console.log("trip :",trip)
+    // console.log("trip :",trip)
     // const [trip, setTrip] = useState(null);
     const [numPersons, setNumPersons] = useState(1);
 

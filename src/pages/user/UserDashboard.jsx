@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 
@@ -16,8 +16,8 @@ import Footer from '../../component/Footer';
 const Dashboard = ({ onLogout }) => {
   const navigate = useNavigate();
   const { trips, loading, error } = useTrips();
-  const { user } = useAuth();
-
+  const { user, loadingUser } = useAuth();
+  // console.log("current user : ", user)
   const [activeCategory, setActiveCategory] = useState(null);
 
   // const categories = categoriesConst;
@@ -30,7 +30,16 @@ const Dashboard = ({ onLogout }) => {
 
   // const firstName = user.fullname.split(' ')[0];
   const firstName = user?.fullname?.split(" ")[0] || "Explorer";
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setIsLoading(false)
+  //   }, 3000);
 
+  //   return () => clearTimeout(timer);
+  // }, [])
+  if (loadingUser) {
+    return <div className="text-center py-20">Loading user...</div>;
+  }
   if (loading) {
     return <div className="text-center py-20">Loading trips...</div>;
   }

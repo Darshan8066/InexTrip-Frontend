@@ -1,20 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
-
-
 import ProfileSidebar from '../../component/ProfileSidebar';
 import AdminSidebar from '../../component/admin/AdminSidebar';
-import { fetchPayment, fetchPaymentByUserId } from '../../services/paymentService';
-import { fetchUserById } from '../../services/authService';
+import { fetchPayment } from '../../services/paymentService';
 import AdminHeader from '../../component/admin/AdminHeader';
 import { useAuth } from '../../context/AuthContext';
 
 const AdminPayments = ({ onLogout }) => {
-
-    const [isSidebarVisible, setSidebarVisible] = useState(true);
+  
     const { user } = useAuth();
 
-
+    const [isSidebarVisible, setSidebarVisible] = useState(true);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -71,10 +67,21 @@ const AdminPayments = ({ onLogout }) => {
                                     {payments?.map(p => {
                                         return (
                                             <tr key={p._id} className="text-slate-600 hover:bg-slate-50 transition-colors group">
-                                                <td className="px-8 py-6 font-mono text-[10px] text-indigo-600 font-black">#{p.transactionId}</td>
+                                                <td className="px-8 py-6 font-mono text-[12px] text-indigo-600 font-black">#{p.transactionId}</td>
                                                 <td className="px-8 py-6">
                                                     <div className="flex items-center gap-3">
-                                                        <img src={p?.userId.profilePhoto} className="w-8 h-8 rounded-lg border border-slate-100 shadow-sm" alt="" />
+                                                        {/* <img src={p?.userId.profilePhoto} className="w-8 h-8 rounded-lg border border-slate-100 shadow-sm" alt="" /> */}
+
+                                                        {p?.userId.profilePhoto ? (
+                                                            <img
+                                                                src={p?.userId.profilePhoto}
+                                                                className="w-8 h-8 rounded-lg border border-slate-100 shadow-sm"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-8 h-8 text-xl bg-indigo-600 rounded font-bold text-white flex items-center justify-center">
+                                                                {p?.userId.fullname.charAt(0).toUpperCase()}
+                                                            </div>
+                                                        )}
                                                         <div>
                                                             <span className="block font-black text-xs text-slate-900">{p?.userId.fullname || 'Anonymous Node'}</span>
                                                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{p.paymentMethod}</span>

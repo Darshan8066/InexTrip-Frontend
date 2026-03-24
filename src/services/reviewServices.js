@@ -23,9 +23,20 @@ export const fetchReview = async () => {
   }
 };
 
+export const fetchUserReviews = async () => {
+  try {
+    const res = await axios.get("/review/user");
+     return res.data;
+
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    throw error;
+  }
+};
+
 export const fetchReviewByTripId = async (tripId) => {
   try {
-    const res = await axios.get(`/review/${tripId}`);
+    const res = await axios.get(`/review/trip/${tripId}`);
     return res.data;
   } catch (error) {
     console.error("Error fetching reviews:", error);

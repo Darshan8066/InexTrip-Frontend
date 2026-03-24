@@ -7,6 +7,7 @@ export const login = async (data) => {
     try {
         const res = await axios.post("/user/login", data)
         setAuth(res.data.token);
+        console.log("login service api",res.data)
         return res?.data;
 
     } catch (error) {

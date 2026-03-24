@@ -14,7 +14,7 @@ const useTrips = () => {
 
             setLoading(true);
             const data = await fetchTrip();
-            console.log("loadTrips:",data.trip)
+            // console.log("loadTrips:",data.trip)
             setTrips(data.trip);
             setError(null);
         } catch (err) {

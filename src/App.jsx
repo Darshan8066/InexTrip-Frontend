@@ -22,6 +22,7 @@ import AdminReviews from './pages/admin/AdminReviews';
 import Loading from './pages/Loading';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast'
+import Reviews from './pages/user/UserReviews';
 // import { swal } from 'sweetalert';
 // import  Swal  from 'sweetalert2'
 
@@ -40,18 +41,17 @@ function App() {
 
   return (
     <>
-      < Toaster position="top-center" />
+      <Toaster position="top-center" />
       {/* <swal /> */}
       {/* <new Swal /> */}
 
-      {isloading ? (
+      {/* {isloading ? (
         <Loading />
-      ) : (
+      ) : ( */}
 
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Home />} />
-
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             {/* <Route path="/user/dashboard" element={<Dashboard />} /> */}
@@ -64,6 +64,7 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="/payment/:tripId" element={<PaymentPage />} />
+            <Route path="/user-reviews" element={<Reviews />} />
             <Route path='/trip/:id' element={<TripDetails />} />
             <Route path='/edit-profile' element={<EditProfile />} />
             <Route path='/history' element={<HistoryPage />} />
@@ -90,7 +91,7 @@ function App() {
 
           </Routes>
         </AuthProvider>
-      )}
+      {/* )} */}
     </>
   )
 }

@@ -10,7 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import { fetchAdminStats } from '../../services/adminService';
 
 
-const AdminDashboard = ({ onLogout }) => {
+const AdminDashboard = () => {
 
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -170,7 +170,7 @@ const AdminDashboard = ({ onLogout }) => {
                     user={user}
                     isOpen={isProfileOpen}
                     onClose={() => setIsProfileOpen(false)}
-                    onLogout={onLogout}
+                    // onLogout={onLogout}
                 />
             )}
         </div>
