@@ -1,21 +1,19 @@
 
 import React, { useState } from 'react';
 
-import Navbar from '../component/Navbar';
-import Footer from '../component/Footer';
-import TripCard from '../component/TripCard';
+import Footer from '../component/layouts/Footer';
+import { Navbar } from '../component/layouts/Navbar';
 import useTrips from '../hooks/useTrips';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { categoriesConst } from '../constants/categories';
-import CategorySection from '../component/CategorySection';
-import { useAuth } from '../context/AuthContext';
+import CategorySection from '../component/common/CategorySection';
+import { useAuth } from '../context/AuthContext'; 
 
 
-const Home = ({ onLogout }) => {
+const Home = () => {
   const navigate = useNavigate();
 
-  const { trips, loading, error } = useTrips();
+  const { trips, loading,  } = useTrips();
   const { user } = useAuth();
 
   const [activeCategory, setActiveCategory] = useState(null);
@@ -26,16 +24,16 @@ const Home = ({ onLogout }) => {
     return <div className="text-center py-20">Loading trips...</div>;
   }
 
-  if (error) {
-    return <div className="text-center py-20 text-red-500">{error}</div>;
-  }
+  // if (error) {
+  //   return <div className="text-center py-20 text-red-500">{error}</div>;
+  // }
 
   const categories = categoriesConst;
 
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-200">
-      <Navbar onLogout={onLogout} />
+      <Navbar />
 
       <main className="flex-grow">
         {/* Cinematic Hero */}
@@ -103,14 +101,6 @@ const Home = ({ onLogout }) => {
             : categories
           ).map((cat) => (
             <section key={cat.name} id={`section-${cat.name.toLowerCase()}`} className="max-w-7xl mx-auto px-6">
-              {/* <CategorySection
-                cat={cat} 
-                activeCategory={activeCategory}
-                setActiveCategory={setActiveCategory}
-                trips={trips}
-                user={user}
-              /> */}
-
               <CategorySection
                 cat={cat}
                 activeCategory={activeCategory}

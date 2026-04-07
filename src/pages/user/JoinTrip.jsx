@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
-import Navbar from '../../component/Navbar';
-import Footer from '../../component/Footer';
-import TripCard from '../../component/TripCard';
+import { useState, useEffect } from 'react';
+import { Navbar } from '../../component/layouts/Navbar';
+import Footer from '../../component/layouts/Footer';
+import TripCard from '../../component/common/TripCard';
 import { useAuth } from '../../context/AuthContext';
 import useTrips from '../../hooks/useTrips';
 
@@ -48,7 +48,7 @@ const JoinTrip = () => {
         <div className="min-h-screen bg-slate-50 flex flex-col">
             <Navbar user={user} onLogout={() => { }} />
 
-            <main className="max-w-7xl mx-auto px-4 py-16 w-full flex-grow">
+            <main className="max-w-7xl  mx-auto px-4 py-16 w-full flex-grow">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                     <div className="max-w-xl">
                         <h1 className="text-5xl font-black text-slate-900 mb-4 tracking-tight">Explore Community Trips</h1>

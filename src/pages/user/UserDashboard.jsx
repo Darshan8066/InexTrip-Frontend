@@ -1,58 +1,38 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 
 import { useNavigate } from 'react-router-dom';
 
-import CategorySection from '../../component/CategorySection';
+import CategorySection from '../../component/common/CategorySection';
 import useTrips from '../../hooks/useTrips';
 import { categoriesConst } from '../../constants/categories';
 import { useAuth } from '../../context/AuthContext';
-import Navbar from '../../component/Navbar';
-import Footer from '../../component/Footer';
+import { Navbar } from '../../component/layouts/Navbar';
+import Footer from '../../component/layouts/Footer';
 
 
-const Dashboard = ({ onLogout }) => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const { trips, loading, error } = useTrips();
-  const { user, loadingUser } = useAuth();
-  // console.log("current user : ", user)
+  const { user, loadingUser, logout } = useAuth();
   const [activeCategory, setActiveCategory] = useState(null);
 
-  // const categories = categoriesConst;
-
-
-
-  // const getTripsByCategory = (cat) => {
-  //   return trip.filter(t => t.description?.toLowerCase().includes(`category: ${cat.toLowerCase()}`)).slice(0, 8);
-  // };
-
-  // const firstName = user.fullname.split(' ')[0];
   const firstName = user?.fullname?.split(" ")[0] || "Explorer";
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setIsLoading(false)
-  //   }, 3000);
-
-  //   return () => clearTimeout(timer);
-  // }, [])
   if (loadingUser) {
     return <div className="text-center py-20">Loading user...</div>;
   }
   if (loading) {
     return <div className="text-center py-20">Loading trips...</div>;
   }
-
   if (error) {
     return <div className="text-center py-20 text-red-500">{error}</div>;
   }
-
   return (
-    <div className="min-h-screen flex flex-col font-serif bg-gray-200">
-      <Navbar onLogout={onLogout} />
-
-      <main className="flex-grow">
+  <div className="min-h-screen flex flex-col bg-gray-200">
+      <Navbar logout={logout} />
+      <main className="flex-grow overflow-y-auto ">
         {/* Top Header Section with Blue/Indigo Sunset Gradient */}
         <div className="bg-gradient-to-t from-gray-200 to-gray-100 via-gray-100 to-gray py-16 px-6">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">

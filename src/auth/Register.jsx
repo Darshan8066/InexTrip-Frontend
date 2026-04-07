@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import  { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
 import { signup } from '../services/authService';
@@ -42,7 +42,7 @@ const Register = () => {
                     console.log(res);
                     toast.success("Registration Successful ✅");
                     setUser(res.user);
-                    navigate('/user/dashboard');
+                    navigate('/dashboard');
                     console.log("welcome user")
                 } catch (err) {
                     toast.error(err.message);

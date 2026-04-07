@@ -1,11 +1,10 @@
-
-import React, { useState, useEffect } from 'react';
-import Navbar from '../../component/Navbar';
-import Footer from '../../component/Footer';
-import TripCard from '../../component/TripCard';
+import  { useState, useEffect } from 'react';
+import { Navbar } from '../../component/layouts/Navbar';
+import Footer from '../../component/layouts/Footer';
+import TripCard from '../../component/common/TripCard';
 import { Link } from 'react-router-dom';
 import useTrips from '../../hooks/useTrips';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 
 
 const Favourites = () => {
@@ -13,7 +12,6 @@ const Favourites = () => {
     const { trips, refetch } = useTrips();
 
     const [currentUser, setCurrentUser] = useState(null);
-
 
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem("user"));

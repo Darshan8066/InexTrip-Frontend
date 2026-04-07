@@ -1,102 +1,87 @@
-
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { useEffect } from 'react';
-import ProfileSidebar from '../../component/ProfileSidebar';
+import ProfileSidebar from '../../component/layouts/ProfileSidebar';
 import AdminSidebar from '../../component/admin/AdminSidebar';
 import AdminHeader from '../../component/admin/AdminHeader';
 import { useAuth } from '../../context/AuthContext';
 import { fetchAdminStats } from '../../services/adminService';
 
-
-const AdminDashboard = () => {
+const AdminDashboard = () => {  // ✅ accept logout prop
 
     const navigate = useNavigate();
-    const { user } = useAuth();
-    const [isSidebarVisible, setSidebarVisible] = useState(true);
+    const { user, logout } = useAuth();
+
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [statsData, setStatsData] = useState(null);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
+        console.log("Fetching admin stats...");
         const loadData = async () => {
             try {
-
                 const response = await fetchAdminStats();
-                setStatsData(response)
-                console.log(response)
-
+                console.log("fetchAdminStats:", response);
+                setStatsData(response);
             } catch (err) {
-                console.error("Failed to load admin data", err);
+                console.error("Failed to load admin data", err); // ✅ only error logs in prod
             } finally {
                 setLoading(false);
             }
         };
-
         loadData();
-
     }, []);
 
-    const totalRevenue = statsData?.totalRevenue || 0;
-    console.log("totalRevenue :", totalRevenue)
-
     const stats = [
-        {
-            label: "Total Explorers",
-            value: statsData?.totalUsers || 0,
-            color: "text-blue-600",
-            icon: "👥",
-            path: "/admin/users"
-        },
-        {
-            label: "Inventory Size",
-            value: statsData?.totalTrips || 0,
-            color: "text-orange-600",
-            icon: "🧳",
-            path: "/admin/trips"
-        },
-        {
-            label: "Total Revenue",
-            value: `₹${statsData?.totalRevenue || 0}`,
-            color: "text-emerald-600",
-            icon: "📈",
-            path: "/admin/payments"
-        },
-        {
-            label: "System Health",
-            value: "100%",
-            color: "text-indigo-600",
-            icon: "⚙️",
-            path: "/admin"
-        }
+        { label: "Total Explorers", value: statsData?.totalUsers || 0, color: "text-blue-600", icon: "👥", path: "/admin/users" },
+        { label: "Inventory Size", value: statsData?.totalTrips || 0, color: "text-orange-600", icon: "🧳", path: "/admin/trips" },
+        { label: "Total Revenue", value: `₹${statsData?.totalRevenue || 0}`, color: "text-emerald-600", icon: "📈", path: "/admin/payments" },
+        { label: "System Health", value: "100%", color: "text-indigo-600", icon: "⚙️", path: "/admin" },
     ];
 
+    // ✅ Consistent loading state - matches AdminUsers style
     if (loading) {
-        return <div style={{ color: "red" }} className="p-10 text-center">Loading Dashboard...</div>;
+        return (
+            <div className="h-screen bg-slate-50 flex items-center justify-center">
+                <p className="text-slate-400 font-black uppercase tracking-widest text-xs">
+                    Loading Dashboard...
+                </p>
+            </div>
+        );
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 flex text-slate-900">
-            {/* Sidebar - TOGGLEABLE */}
-            <AdminSidebar isSidebarVisible={isSidebarVisible} />
+        // ✅ h-screen + overflow-hidden — matches AdminUsers layout exactly
+        <div className="h-screen bg-slate-50 flex text-slate-900 overflow-hidden">
 
-            {/* Main Content */}
-            <main className="flex-grow ">
-
-                {/* Admin HEader */}
+            <AdminSidebar
+                isCollapsed={isCollapsed}
+                onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
+            />
+            {/* ✅ overflow-y-auto so content scrolls inside, not the whole page */}
+            {/* <main className="flex-grow h-full overflow-y-auto overflow-x-hidden transition-all duration-300 scroll-smooth"> */}
+            <main
+                className={`flex-grow h-full  overflow-y-auto overflow-x-hidden transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"}`}
+            >
                 <AdminHeader
                     title="Command Center"
                     subtitle="Live Operational Hub"
                     user={user}
                     onProfileClick={() => setIsProfileOpen(true)}
-                    onToggleSidebar={() => setSidebarVisible(!isSidebarVisible)}
-                />
 
+                />
+                {loading &&
+                    // <div className="h-screen bg-slate-50 flex items-center justify-center">
+                    <p className="text-slate-400 font-black uppercase tracking-widest text-xs">
+                        Loading Dashboard...
+                    </p>
+                    // </div>
+
+                }
                 <div className="p-8 space-y-8 max-w-7xl mx-auto">
-                    {/* Stats Cards - CLICKABLE */}
+
+                    {/* Stats Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {stats.map((stat, i) => (
                             <button
@@ -115,8 +100,11 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                        {/* Revenue Chart */}
                         <div className="lg:col-span-2 bg-white p-8 rounded-[48px] border border-slate-200 shadow-sm relative overflow-hidden">
-                            <h3 className="text-lg font-black text-slate-900 mb-8 tracking-tight flex items-center gap-3 uppercase tracking-widest text-xs">
+                            {/* ✅ Fixed: removed duplicate tracking-widest */}
+                            <h3 className="font-black text-slate-900 mb-8 uppercase tracking-widest text-xs flex items-center gap-3">
                                 <span className="w-1.5 h-6 bg-indigo-600 rounded-full" />
                                 Revenue Performance Flow
                             </h3>
@@ -139,8 +127,9 @@ const AdminDashboard = () => {
                             </div>
                         </div>
 
+                        {/* Quick Deploy */}
                         <div className="bg-white p-8 rounded-[48px] border border-slate-200 shadow-sm">
-                            <h3 className="text-lg font-black text-slate-900 mb-8 tracking-tight flex items-center gap-3 uppercase tracking-widest text-xs">
+                            <h3 className="font-black text-slate-900 mb-8 uppercase tracking-widest text-xs flex items-center gap-3">
                                 <span className="w-1.5 h-6 bg-orange-500 rounded-full" />
                                 Quick Deploy
                             </h3>
@@ -170,7 +159,7 @@ const AdminDashboard = () => {
                     user={user}
                     isOpen={isProfileOpen}
                     onClose={() => setIsProfileOpen(false)}
-                    // onLogout={onLogout}
+                    logout={logout}  // ✅ properly wired
                 />
             )}
         </div>

@@ -7,9 +7,9 @@
 
 import axios from "./axios";
 
-export const fetchauditUser = async (targetUserId) => {
+export const fetchauditUser = async (id) => {
     try {
-        const res = await axios.get(`/api/users/audit/${targetUserId}`);
+        const res = await axios.get(`/user/audit/${id}`);
         console.log(res);
         return res.data;
 

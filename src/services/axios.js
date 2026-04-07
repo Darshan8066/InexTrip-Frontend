@@ -30,14 +30,48 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response.status === 401) {
-            // remove data 
+
+        // ✅ Handle 401 globally
+        // if (error?.response?.status === 401) {
+        //     sessionStorage.removeItem("token");
+        //     // window.location.href = "/login";
+        //     window.location.replace("/login");
+        // }
+
+        if (error?.response?.status === 401) {
             sessionStorage.removeItem("token");
-            window.location.href = "/login";
+
+            if (window.location.pathname !== "/login") {
+                window.location.replace("/login"); // ✅ prevents loop
+            }
         }
+
+        // ✅ Global error parsing
+        let message = "Something went wrong. Please try again.";
+
+        if (!error.response) {
+            message = "Unable to reach server. Please check your connection.";
+        } else if (error.response?.data?.message) {
+            message = error.response.data.message;
+        }
+
+        // ✅ attach clean message
+        error.customMessage = message;
+
         return Promise.reject(error);
     }
-)
+);
+// axiosInstance.interceptors.response.use(
+//     (response) => response,
+//     (error) => {
+//         if (error?.response?.status === 401) {
+//             // remove data 
+//             sessionStorage.removeItem("token");
+//             window.location.href = "/login";
+//         }
+//         return Promise.reject(error);
+//     }
+// )
 
 
 export default axiosInstance;

@@ -12,7 +12,7 @@ export const saveHistory = async (data) => {
 
         console.log("Create Trip Error:", message);
 
-        throw new Error(message);
+         throw new Error(error.customMessage); // 🔥 clean
     }
 };
 
@@ -28,7 +28,7 @@ export const fetchHistoryByUserId = async () => {
 
         console.log("History Not Found:", message);
 
-        throw new Error(message); // send real message to frontend
+         throw new Error(error.customMessage); // 🔥 clean // send real message to frontend
     }
 };
 
@@ -43,6 +43,6 @@ export const clearHistory = async () => {
     } catch (error) {
 
         console.log(error.message);
-        throw error;
+        throw new Error(error.customMessage); // 🔥 clean
     }
 };

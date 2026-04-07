@@ -7,7 +7,7 @@ export const createReview = async (reviewData) => {
     return res.data;
   } catch (error) {
     console.error("Error creating review:", error);
-    throw error;
+     throw new Error(error.customMessage); // 🔥 clean
   }
 };
 
@@ -19,7 +19,7 @@ export const fetchReview = async () => {
     return res.data;
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    throw error;
+     throw new Error(error.customMessage); // 🔥 clean
   }
 };
 
@@ -30,7 +30,7 @@ export const fetchUserReviews = async () => {
 
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    throw error;
+     throw new Error(error.customMessage); // 🔥 clean
   }
 };
 
@@ -40,7 +40,7 @@ export const fetchReviewByTripId = async (tripId) => {
     return res.data;
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    throw error;
+     throw new Error(error.customMessage); // 🔥 clean
   }
 };
 
@@ -53,6 +53,6 @@ export const deleteReview = async (reviewId) => {
     return res.data;
   } catch (error) {
     console.error("Error deleting review:", error);
-    throw error;
+     throw new Error(error.customMessage); // 🔥 clean
   }
 };

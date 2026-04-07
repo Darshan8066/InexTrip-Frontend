@@ -1,115 +1,304 @@
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import ProfileSidebar from "../../component/layouts/ProfileSidebar";
+import { fetchTrip, deleteTrip } from "../../services/tripServices";
+import AdminSidebar from "../../component/admin/AdminSidebar";
+import { useAuth } from "../../context/AuthContext";
+import TripForm from "../../component/admin/TripForm";
+import AdminHeader from "../../component/admin/AdminHeader";
+import { TripPhotos } from "../../component/user/TripPhotos";
+import TripContent from "../../component/user/TripContent";
+import ReviewSection from "../../component/user/ReviewSection";
+import RelatedTrips from "../../component/user/RelatedTrips";
 
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import ProfileSidebar from '../../component/ProfileSidebar';
-import { deleteTrip } from '../../services/tripServices';
-import AdminSidebar from '../../component/admin/AdminSidebar';
-import { useAuth } from '../../context/AuthContext';
-import { FieldArray } from 'formik';
-import * as Yup from "yup";
-import useTrips from '../../hooks/useTrips';
-import TripForm from '../../component/admin/TripForm';
-import AdminHeader from '../../component/admin/AdminHeader';
+const TRIPS_PER_PAGE = 6;
 
-
-const AdminTrips = ({ onLogout }) => {
-
+export const AdminTrips = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, logout } = useAuth();
 
-  const { user } = useAuth();
-  const { trips, refetch } = useTrips();
+  // ── Server-side pagination state ─────────────────────────────────────────
+  const [trips, setTrips] = useState([]);
+  const [totalTrips, setTotalTrips] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [selectedTrip, setSelectedTrip] = useState(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // ── Fetch page from backend ───────────────────────────────────────────────
+  const loadPage = useCallback(async (page) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchTrip({ page, limit: TRIPS_PER_PAGE });
+      setTrips(data.trips);
+      setTotalTrips(data.totalTrips);
+      setTotalPages(data.totalPages);
+      setCurrentPage(data.currentPage);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Load page 1 on mount
+  useEffect(() => {
+    loadPage(1);
+  }, [loadPage]);
+
+  // Re-load current page whenever currentPage changes (via pagination buttons)
+  useEffect(() => {
+    loadPage(currentPage);
+  }, [currentPage, loadPage]);
+
+  // Open create modal if ?create=true in URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    console.log("params :", params)
-    if (params.get('create') === 'true') {
-      setShowCreateModal(true);
-    }
+    if (params.get("create") === "true") setShowCreateModal(true);
   }, [location.search]);
 
+  // ── Handlers ─────────────────────────────────────────────────────────────
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages || page === currentPage) return;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+
+  const handleEditTrip = (trip) => {
+    navigate(`/admin/trips/edit/${trip._id}`);
+  };
+
   const handleDeleteTrip = async (id) => {
-    if (window.confirm("Permanently decommission this travel package from all public inventories?")) {
-      try {
-        await deleteTrip(id);
-        await refetch();
-        alert("Inventory package decommissioned.");
-      } catch (err) {
-        alert(err.message);
-      }
+    if (!window.confirm("Are you sure you want to permanently delete this trip?")) return;
+    try {
+      setDeletingId(id);
+      await deleteTrip(id);
+      // After delete: if this was the last item on the page, go back one page
+      const newTotal = totalTrips - 1;
+      const newTotalPages = Math.ceil(newTotal / TRIPS_PER_PAGE);
+      const targetPage = currentPage > newTotalPages ? Math.max(1, newTotalPages) : currentPage;
+      await loadPage(targetPage);
+      setCurrentPage(targetPage);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setDeletingId(null);
     }
   };
+
+  // ── Pagination helpers ────────────────────────────────────────────────────
+  const getPageNumbers = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      const isEdge = i === 1 || i === totalPages;
+      const isNear = Math.abs(i - currentPage) <= 1;
+      if (isEdge || isNear) {
+        pages.push(i);
+      } else if (
+        (i === currentPage - 2 && currentPage > 3) ||
+        (i === currentPage + 2 && currentPage < totalPages - 2)
+      ) {
+        pages.push("...");
+      }
+    }
+    // Deduplicate consecutive "..."
+    return pages.filter((p, idx) => !(p === "..." && pages[idx - 1] === "..."));
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 flex text-slate-900">
 
-      <AdminSidebar isSidebarVisible={isSidebarVisible} />
+      <AdminSidebar
+        isCollapsed={isCollapsed}
+        onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
+      />
 
-      <main className="flex-grow">
+      <main
+        className={`
+    flex-grow 
+    h-screen
+    overflow-y-auto   // ✅ IMPORTANT
+    transition-all duration-300
+    ${isCollapsed ? "ml-20" : "ml-72"}
+  `}
+      >
         <AdminHeader
           title="Inventory Control"
-          subtitle={`Active Batch Units: ${trips.length}`}
+          subtitle={`Active Batch Units: ${totalTrips}`}
           user={user}
           onProfileClick={() => setIsProfileOpen(true)}
           onToggleSidebar={() => setSidebarVisible(!isSidebarVisible)}
-        // rightContent={
-
-        // }
         />
 
-        <div className=" px-6">
-          <div className=" py-4 flex justify-end">
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="bg-indigo-600  text-white px-6 py-3 rounded-xl text-[13px]"
-          >
-            Add New Inventory  🚀
-          </button>
-          </div>
-          <div className="border-3 border-slate-100 rounded-xl ">
-            <div className="grid grid-cols-1 mx-5 my-5  md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {trips?.map(trip => (
-                <div key={trip._id} className="bg-white rounded-[32px] overflow-hidden border border-slate-200 flex flex-col group shadow-sm hover:border-indigo-400 transition-all">
+        <div className={`px-6 pb-10 mx-auto ${selectedTrip ? "max-w-[1200px]" : "max-w-[1800px]"
+          }`}>
+          {/* Top bar */}
+
+          {!selectedTrip && (
+            <div className="py-4 flex items-center justify-between">
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                {totalTrips} trips · Page {currentPage} of {totalPages}
+              </p>
+
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="bg-indigo-600 text-white px-6 py-3 rounded-xl text-[13px] font-bold"
+              >
+                Add New Inventory 🚀
+              </button>
+            </div>
+          )}
+
+          {/* Error state */}
+          {error && (
+            <div className="mb-4 px-5 py-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-600 text-sm font-bold">
+              {error} —{" "}
+              <button onClick={() => loadPage(currentPage)} className="underline">
+                Retry
+              </button>
+            </div>
+          )}
+
+          {/* Loading */}
+          {selectedTrip ? (
+            <div>
+              {/* Back button */}
+              <button
+                onClick={() => setSelectedTrip(null)}
+                className="mb-4 px-4 py-2 bg-slate-100 rounded-lg text-sm font-bold"
+              >
+                ← Back to Trips
+              </button>
+
+              {/* Trip Details UI */}
+              <TripPhotos trip={selectedTrip} />
+              <TripContent trip={selectedTrip} />
+              <RelatedTrips trip={selectedTrip} />
+              <ReviewSection tripId={selectedTrip._id} />
+
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {trips.map((trip) => (
+                <div key={trip._id} className="bg-white rounded-[28px] overflow-hidden border border-slate-200 flex flex-col group shadow-sm hover:border-indigo-400 hover:shadow-md transition-all duration-300"
+                >
+                  {/* Image */}
                   <div className="h-56 relative overflow-hidden">
-                    <img src={trip.images[0]} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="" />
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[8px] font-black text-indigo-600 uppercase tracking-widest border border-slate-100">
-                      {trip.tripType}
-                    </div>
+                    <img
+                      src={trip.images?.[0] || "https://via.placeholder.com/400x208?text=No+Image"}
+                      alt={`${trip.from} to ${trip.to}`}
+                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <button
+                      onClick={() => handleEditTrip(trip)}
+                      className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[8px] font-black text-indigo-600 uppercase tracking-widest border border-slate-100 hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
+                    >
+                      Edit
+                    </button>
                     <div className="absolute bottom-4 left-4 text-white">
                       <p className="text-[8px] font-black text-indigo-100 uppercase tracking-widest mb-0.5">{trip.from}</p>
-                      <h3 className="text-xl font-black tracking-tight leading-none">{trip.to}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-xl font-black tracking-tight leading-none">{trip.to}</h3>
+                        <div className="bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-md text-[7px] font-black text-white uppercase tracking-widest border border-white/30">
+                          {trip.tripType}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="p-6 flex-grow flex flex-col justify-between">
-                    <div className="flex justify-between items-center mb-6">
+
+                  {/* Card body */}
+                  <div className="p-5 flex-grow flex flex-col justify-between">
+                    <div className="flex justify-between items-center mb-5">
                       <div>
                         <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Commercials</p>
-                        <p className="text-lg font-black text-emerald-600 leading-none">₹{trip.price.toLocaleString()}</p>
+                        <p className="text-lg font-black text-emerald-600 leading-none">
+                          ₹{trip.price?.toLocaleString("en-IN")}
+                        </p>
                       </div>
                       <div className="text-right">
                         <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Timeline</p>
-                        <p className="text-sm font-black text-slate-900 leading-none">{trip.dayPlan.length} Days</p>
+                        <p className="text-sm font-black text-slate-900 leading-none">
+                          {trip.dayPlan?.length ?? 0} Days
+                        </p>
                       </div>
                     </div>
 
-                    <div className="flex gap-3 pt-4 border-t border-slate-50">
-                      <button onClick={() => navigate(`/trip/${trip._id}`)} className="flex-1 bg-slate-50 py-3 rounded-xl text-[9px] font-black text-slate-400 uppercase tracking-widest hover:bg-slate-100 hover:text-indigo-600 transition-all">Review</button>
+                    <div className="flex gap-3 pt-4 border-t border-slate-100">
+                      <button
+                        // onClick={() => navigate(`/trip/${trip._id}`)}
+                        onClick={() => setSelectedTrip(trip)}
+                        className="flex-1 bg-slate-50 py-2.5 rounded-xl text-[9px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-100 hover:text-indigo-600 transition-all"
+                      >
+                        Review
+                      </button>
                       <button
                         onClick={() => handleDeleteTrip(trip._id)}
-                        className="flex-1 bg-rose-50 py-3 rounded-xl text-[9px] font-black text-rose-500 uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all"
+                        disabled={deletingId === trip._id}
+                        className="flex-1 bg-rose-50 py-2.5 rounded-xl text-[9px] font-black text-rose-500 uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Delete
+                        {deletingId === trip._id ? "Deleting..." : "Delete"}
                       </button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          )}
+
+          {/* ── Pagination ────────────────────────────────────────────────── */}
+          {/* {totalPages > 1 && !loading && ( */}
+          {!selectedTrip && totalPages > 1 && !loading && (
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                ← Prev
+              </button>
+
+              {getPageNumbers().map((page, idx) =>
+                page === "..." ? (
+                  <span key={`ellipsis-${idx}`} className="px-2 text-slate-400 font-bold text-sm select-none">
+                    …
+                  </span>
+                ) : (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`w-9 h-9 rounded-xl text-[11px] font-black transition-all ${currentPage === page
+                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
+                      : "border border-slate-200 text-slate-500 hover:bg-slate-100"
+                      }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                Next →
+              </button>
+            </div>
+          )}
         </div>
       </main>
 
@@ -118,16 +307,20 @@ const AdminTrips = ({ onLogout }) => {
           user={user}
           isOpen={isProfileOpen}
           onClose={() => setIsProfileOpen(false)}
-          onLogout={onLogout}
+          logout={logout}
         />
       )}
 
-      {/* Deploy Manual Package Modal */}
       {showCreateModal && (
-        <TripForm setShowCreateModal={setShowCreateModal} />
+        <TripForm
+          setShowCreateModal={setShowCreateModal}
+          onSuccess={async () => {
+            await loadPage(1); // go to page 1 to see the new trip
+            setCurrentPage(1);
+            setShowCreateModal(false);
+          }}
+        />
       )}
-    </div >
+    </div>
   );
 };
-
-export default AdminTrips;

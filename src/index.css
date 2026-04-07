@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -9,7 +7,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  /* background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,28 +21,14 @@ body {
   background: white;
 }
 
-@layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
+/* Only apply where needed */
+/* @layer utilities {
+  .::-webkit-scrollbar {
     display: none;
   }
 
-  .no-scrollbar {
+  . {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-}
-
-/* Hide vertical scrollbar but keep scrolling */
-html,
-body {
-  -ms-overflow-style: none;
-  /* IE & Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;
-  /* Chrome, Safari */
-}
+} */

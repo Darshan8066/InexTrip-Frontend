@@ -10,7 +10,7 @@ const TripType = {
 };
 
 
-export default function PackageValues({trip}) {
+export default function PackageValues({ trip }) {
 
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -48,7 +48,7 @@ export default function PackageValues({trip}) {
 
 
 
-    const totalPrice = trip.price * numPersons;
+    const totalPrice = (trip?.price || 0) * numPersons;
     return (
         <div>
             <aside className="md:col-span-1">
@@ -57,7 +57,7 @@ export default function PackageValues({trip}) {
                         <p className="text-slate-400 font-black uppercase text-xs tracking-widest mb-4">Final Package Value</p>
                         <div className="text-6xl font-black text-slate-900 mb-12 leading-none tracking-tighter">₹{totalPrice.toLocaleString()}</div>
 
-                        {trip.tripType === TripType.JOIN && (
+                        {trip?.tripType === TripType.JOIN && (
                             <div className="mb-12 bg-slate-50 p-8 rounded-[32px] border border-slate-100">
                                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Group Size (Persons)</label>
                                 <div className="flex items-center justify-center gap-8">
@@ -77,23 +77,28 @@ export default function PackageValues({trip}) {
                         <div className="bg-slate-50 p-8 rounded-[32px] space-y-6 mb-12 text-left border border-slate-100">
                             <div className="flex justify-between items-center pb-4 border-b border-slate-200">
                                 <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">Route</span>
-                                <span className="text-slate-900 ml-5 font-black text-lg">{trip.from} &rarr; {trip.to}</span>
+                                <span className="text-slate-900 ml-5 font-black text-lg">{trip?.from} &rarr; {trip?.to}</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">Transport</span>
-                                <span className="text-slate-900 font-black text-lg">{trip.transportMode}</span>
+                                <span className="text-slate-900 font-black text-lg">{trip?.transportMode}</span>
                             </div>
                         </div>
+
+
+
 
                         <button
                             onClick={handleConfirmAction}
                             className="w-full bg-slate-900 text-white py-6 rounded-3xl font-black text-xl hover:bg-indigo-600 transition-all shadow-2xl uppercase tracking-widest"
                         >
-                            {trip.tripType === TripType.AI ? 'SAVE MY PLAN' : 'BOOK ADVENTURE'}
+                            {trip?.tripType === TripType.AI ? 'SAVE MY PLAN' : 'BOOK ADVENTURE'}
                         </button>
                     </div>
                 </div>
             </aside>
         </div>
+
+
     )
 }

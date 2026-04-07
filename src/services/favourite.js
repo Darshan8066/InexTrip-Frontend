@@ -10,6 +10,6 @@ export const toggleFavourite = async (tripId) => {
 
     } catch (error) {
         console.log(" Failed to toggle favourite ", error)
-        throw error;
+         throw new Error(error.customMessage); // 🔥 clean
     }
 }

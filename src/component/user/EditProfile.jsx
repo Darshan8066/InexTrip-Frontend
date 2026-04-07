@@ -1,26 +1,24 @@
 
-import React, { useEffect, useRef, useState } from "react";
+import{ useEffect, useRef, useState } from "react";
 
 import toast from 'react-hot-toast'
-import Navbar from "../Navbar";
-import Footer from "../Footer";
-// import axios from "../../services/axios";
-
+import { Navbar } from "../layouts/Navbar";
+import Footer from "../layouts/Footer";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { object, string } from "yup";
 import { fetchUserById, updateProfile } from "../../services/authService";
-import { getToken, setAuth } from "../../utils/auth";
+import { getToken } from "../../utils/auth";
 import { useAuth } from "../../context/AuthContext";
 import axios from "../../services/axios";
-import Swal from 'sweetalert2'
 
-const EditProfile = ({ onLogout }) => {
+
+const EditProfile = () => {
 
     const navigate = useNavigate();                           // React Router navigation hook
     const fileInputRef = useRef(null);                        // Used to trigger hidden file input when clicking "Change Photo"
     const token = getToken();                                 // Get logged in user from localStorage
-    const { setUser } = useAuth();
+    const { setUser, logout } = useAuth();
     const [selectedFile, setSelectedFile] = useState(null);
 
     if (!token) {
@@ -80,21 +78,8 @@ const EditProfile = ({ onLogout }) => {
 
                 // update context
                 setUser(res.user);
-
-                // Swal.fire({
-                //     title: "Do you want to save the changes?",
-                //     showDenyButton: true,
-                //     showCancelButton: true,
-                //     confirmButtonText: "Save",
-                //     denyButtonText: `Don't save`
-                // }).then((result) => {
-                //     /* Read more about isConfirmed, isDenied below */
-                //     if (result.isConfirmed) Swal.fire("Saved!", "", "success");
-                //     else if (result.isDenied) Swal.fire("Changes are not saved", "", "info");
-                // });
-
                 toast.success("Profile updated successfully!");
-                navigate("/user/dashboard");
+                navigate("/dashboard");
 
             } catch (error) {
                 console.log(error);
@@ -149,7 +134,7 @@ const EditProfile = ({ onLogout }) => {
 
 
             {/* Navbar */}
-            <Navbar onLogout={onLogout} />
+            <Navbar logout={logout} />
 
             <main className="max-w-3xl mx-auto px-4 py-12 w-full flex-grow">
 
@@ -286,7 +271,7 @@ const EditProfile = ({ onLogout }) => {
 
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/user/dashboard")}
+                                    onClick={() => navigate("/dashboard")}
                                     className="px-8 text-black bg-gray-100 rounded-xl"
                                 >
                                     Discard

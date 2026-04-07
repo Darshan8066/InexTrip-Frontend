@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
-import TripCard from './TripCard';
+import TripCard from "./TripCard"
 import { Link } from 'react-router-dom';
 
-// export default function CategorySection({ user, trips, setActiveCategory, activeCategory, cat }) {
-export default function CategorySection({ user, trips, setActiveCategory, activeCategory, cat, onBookClick }) {
+export default function CategorySection({ user, trips, onBookClick, setActiveCategory, activeCategory, cat }) {
 
     const getTripsByCategory = (catName) => {
         if (!catName) return [];
@@ -13,7 +11,7 @@ export default function CategorySection({ user, trips, setActiveCategory, active
                 t.category &&
                 t.category.toLowerCase().trim().includes(catName.toLowerCase().trim())
             )
-            .slice(0, 8);
+
     };
 
     return (

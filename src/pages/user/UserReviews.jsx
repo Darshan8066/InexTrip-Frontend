@@ -45,7 +45,7 @@ const UserReviews = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 p-6 lg:p-12">
+        <div className="min-h-screen  bg-slate-50 p-6 lg:p-12">
             <div className="max-w-6xl mx-auto">
                 <header className="mb-16 text-center">
                     <motion.h1
@@ -141,7 +141,7 @@ const UserReviews = () => {
                                                 ))}
                                             </div>
                                             <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">
-                                                {new Date(review.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                {new Date(review.date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
                                             </span>
                                         </div>
                                         <div className="flex-grow mb-8">

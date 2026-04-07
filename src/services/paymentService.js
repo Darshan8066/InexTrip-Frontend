@@ -9,7 +9,7 @@ export const fetchPayment = async () => {
 
     } catch (error) {
         console.log("payment data Failed", error)
-        throw error;
+         throw new Error(error.customMessage); // 🔥 clean
     }
 
 };
@@ -27,7 +27,7 @@ export const fetchPaymentByUserId = async () => {
 
         console.log("User Not Found:", message);
 
-        throw new Error(message);
+         throw new Error(error.customMessage); // 🔥 clean
     }
 };
 
@@ -44,6 +44,6 @@ export const savePayment = async (paymentData) => {
 
         console.error("Payment Error:", message);
 
-        throw new Error(message);
+         throw new Error(error.customMessage); // 🔥 clean
     }
 };

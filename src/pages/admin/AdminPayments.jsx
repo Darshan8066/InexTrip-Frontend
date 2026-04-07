@@ -1,16 +1,16 @@
 
-import React, { useState, useEffect } from 'react';
-import ProfileSidebar from '../../component/ProfileSidebar';
+import { useState, useEffect } from 'react';
+import ProfileSidebar from '../../component/layouts/ProfileSidebar';
 import AdminSidebar from '../../component/admin/AdminSidebar';
 import { fetchPayment } from '../../services/paymentService';
 import AdminHeader from '../../component/admin/AdminHeader';
 import { useAuth } from '../../context/AuthContext';
 
-const AdminPayments = ({ onLogout }) => {
-  
-    const { user } = useAuth();
+const AdminPayments = () => {
 
-    const [isSidebarVisible, setSidebarVisible] = useState(true);
+    const { user, logout } = useAuth();
+
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -33,15 +33,20 @@ const AdminPayments = ({ onLogout }) => {
     return (
         <div className="min-h-screen bg-slate-50 flex text-slate-900">
             {/* Sidebar - TOGGLEABLE */}
-            <AdminSidebar isSidebarVisible={isSidebarVisible} />
+            <AdminSidebar
+                isCollapsed={isCollapsed}
+                onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
+            />
 
-            <main className="flex-grow">
+            <main
+                className={`flex-grow h-screen  overflow-y-auto overflow-x-hidden transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"}`}
+            >
                 <AdminHeader
                     title="Finance Ledger"
                     subtitle={`Total Transaction : ${payments.length}`}
                     user={user}
                     onProfileClick={() => setIsProfileOpen(true)}
-                    onToggleSidebar={() => setSidebarVisible(!isSidebarVisible)}
+
                 />
 
                 <div className="p-8">
@@ -108,7 +113,7 @@ const AdminPayments = ({ onLogout }) => {
                     user={user}
                     isOpen={isProfileOpen}
                     onClose={() => setIsProfileOpen(false)}
-                    onLogout={onLogout}
+                    logout={logout}
                 />
             )}
         </div>
