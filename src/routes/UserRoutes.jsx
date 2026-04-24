@@ -9,19 +9,28 @@ import Favourites from "../pages/user/Favourites";
 import JoinTrip from "../pages/user/JoinTrip";
 import Reviews from "../pages/user/UserReviews";
 import { Settings } from "../pages/user/Settings";
+import CreateTrip from "../pages/user/CreateTrip";
+import { Navbar } from "../component/layouts/Navbar";
+import TripDetails from "../pages/user/TripDetails";
+
 
 export default function UserRoutes() {
     return (
         <Route element={<ProtectedRoute allowedRoles={["USER"]} />}>
-
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/edit-profile" element={<EditProfile />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/favourites" element={<Favourites />} />
-            <Route path="/join-trip" element={<JoinTrip />} />
-            <Route path="/user-reviews" element={<Reviews />} />
-            <Route path="/settings" element={<Settings />} />
-
+            <Route element={<Navbar />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/join-trip" element={<JoinTrip />} />
+                <Route
+                    path="/trip/:id"
+                    element={<TripDetails key={window.location.pathname} />}
+                />
+                <Route path="/create-trip" element={<CreateTrip />} />
+                <Route path="/edit-profile" element={<EditProfile />} />
+                <Route path="/favourites" element={<Favourites />} />
+                <Route path="/user-reviews" element={<Reviews />} />
+                <Route path="/settings" element={<Settings />} />
+            </Route>
         </Route>
     );
 }

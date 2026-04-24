@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from 'react';
-import { Navbar } from '../../component/layouts/Navbar';
 import Footer from '../../component/layouts/Footer';
 import TripCard from '../../component/common/TripCard';
 import { useAuth } from '../../context/AuthContext';
 import useTrips from '../../hooks/useTrips';
+import { useLocation } from 'react-router-dom';
 
 
 const JoinTrip = () => {
@@ -16,7 +16,14 @@ const JoinTrip = () => {
     const [allTrips, setAllTrips] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("");
-
+    const [category, setCategory] = useState("All");
+    const location = useLocation();
+    const selectedCategory = location.state?.selectedCategory;
+    useEffect(() => {
+        if (selectedCategory) {
+            setCategory(selectedCategory);
+        }
+    }, [selectedCategory]);
     const fetchTrips = async () => {
         try {
             console.log("fetchTrips:", trips)
@@ -34,19 +41,26 @@ const JoinTrip = () => {
         fetchTrips()
     }, [trips]);
 
+    const categories = ["All", "Heritage", "Mountains", "Cities", "Beaches"];
+
     const filteredTrips = allTrips.filter(t => {
         const search = filter.toLowerCase();
-        return (
+
+        const matchesSearch =
             t.to.toLowerCase().includes(search) ||
             t.from.toLowerCase().includes(search) ||
-            t.description?.toLowerCase().includes(search) ||
-            t.to.toLowerCase().startsWith(search)
-        );
+            t.description?.toLowerCase().includes(search);
+
+        const matchesCategory =
+            category === "All" ||
+            t.category?.toLowerCase() === category.toLowerCase();
+
+        return matchesSearch && matchesCategory;
     });
+
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col">
-            <Navbar user={user} onLogout={() => { }} />
 
             <main className="max-w-7xl  mx-auto px-4 py-16 w-full flex-grow">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
@@ -70,6 +84,20 @@ const JoinTrip = () => {
                             </svg>
                         </div>
                     </div>
+                </div>
+                <div className="flex flex-wrap gap-3 mb-10">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat}
+                            onClick={() => setCategory(cat)}
+                            className={`px-5 py-2 rounded-2xl font-bold text-sm transition ${category === cat
+                                ? "bg-indigo-600 text-white"
+                                : "bg-white border border-slate-200 text-slate-600 hover:border-indigo-600"
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
                 </div>
 
                 {filteredTrips.length === 0 ? (

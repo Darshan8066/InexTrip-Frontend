@@ -262,12 +262,9 @@ export default function TripForm({ setShowCreateModal }) {
               <div>
                 <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">Category</label>
                 <select
-                  // type="text"
-                  // list="category-suggestions"
                   name="category"
                   value={values.category}
                   onChange={handleChange}
-                  // placeholder="e.g. Heritage, Mountains, Beaches"
                   className="w-full px-6 py-4 bg-slate-50 border border-slate-100 focus:border-indigo-600 rounded-2xl outline-none font-bold text-sm"
                 >
                   <option value="Heritage">Heritage</option>

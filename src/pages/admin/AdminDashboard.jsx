@@ -1,31 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import ProfileSidebar from '../../component/layouts/ProfileSidebar';
-import AdminSidebar from '../../component/admin/AdminSidebar';
-import AdminHeader from '../../component/admin/AdminHeader';
-import { useAuth } from '../../context/AuthContext';
 import { fetchAdminStats } from '../../services/adminService';
+import { LuggageIcon, Settings2Icon, TrendingUpIcon, Users2Icon, RocketIcon, ClipboardListIcon, StarIcon } from 'lucide-react';
+import { fetchReview } from '../../services/reviewServices';
+
+
+
 
 const AdminDashboard = () => {  // ✅ accept logout prop
 
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
-
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [statsData, setStatsData] = useState(null);
+    const [reviews, setReviews] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log("Fetching admin stats...");
         const loadData = async () => {
             try {
                 const response = await fetchAdminStats();
-                console.log("fetchAdminStats:", response);
                 setStatsData(response);
             } catch (err) {
-                console.error("Failed to load admin data", err); // ✅ only error logs in prod
+                console.error("Failed to load admin data", err);
             } finally {
                 setLoading(false);
             }
@@ -33,11 +29,29 @@ const AdminDashboard = () => {  // ✅ accept logout prop
         loadData();
     }, []);
 
+
+
+    useEffect(() => {
+
+        const ReviewData = async () => {
+            try {
+                const response = await fetchReview();
+                setReviews(response.reviews);
+
+            } catch (err) {
+                console.error("Failed to load admin data", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        ReviewData();
+
+    }, []);
     const stats = [
-        { label: "Total Explorers", value: statsData?.totalUsers || 0, color: "text-blue-600", icon: "👥", path: "/admin/users" },
-        { label: "Inventory Size", value: statsData?.totalTrips || 0, color: "text-orange-600", icon: "🧳", path: "/admin/trips" },
-        { label: "Total Revenue", value: `₹${statsData?.totalRevenue || 0}`, color: "text-emerald-600", icon: "📈", path: "/admin/payments" },
-        { label: "System Health", value: "100%", color: "text-indigo-600", icon: "⚙️", path: "/admin" },
+        { label: "Total Explorers", value: statsData?.totalUsers || 0, color: "text-blue-600", icon: <Users2Icon />, path: "/users" },
+        { label: "Inventory Size", value: statsData?.totalTrips || 0, color: "text-orange-600", icon: <LuggageIcon />, path: "/trips" },
+        { label: "Total Revenue", value: `₹${(statsData?.totalRevenue || 0).toLocaleString("en-IN")}`, color: "text-emerald-600", icon: <TrendingUpIcon />, path: "/payments" },
+        { label: 'Reviews', value: reviews?.length, color: 'text-indigo-600', icon: <StarIcon />, path: '/reviews' }
     ];
 
     // ✅ Consistent loading state - matches AdminUsers style
@@ -55,31 +69,18 @@ const AdminDashboard = () => {  // ✅ accept logout prop
         // ✅ h-screen + overflow-hidden — matches AdminUsers layout exactly
         <div className="h-screen bg-slate-50 flex text-slate-900 overflow-hidden">
 
-            <AdminSidebar
-                isCollapsed={isCollapsed}
-                onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
-            />
             {/* ✅ overflow-y-auto so content scrolls inside, not the whole page */}
-            {/* <main className="flex-grow h-full overflow-y-auto overflow-x-hidden transition-all duration-300 scroll-smooth"> */}
             <main
-                className={`flex-grow h-full  overflow-y-auto overflow-x-hidden transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"}`}
+                className={"flex-grow h-full overflow-hidden transition-all duration-300"}
             >
-                <AdminHeader
-                    title="Command Center"
-                    subtitle="Live Operational Hub"
-                    user={user}
-                    onProfileClick={() => setIsProfileOpen(true)}
 
-                />
                 {loading &&
-                    // <div className="h-screen bg-slate-50 flex items-center justify-center">
                     <p className="text-slate-400 font-black uppercase tracking-widest text-xs">
                         Loading Dashboard...
                     </p>
-                    // </div>
 
                 }
-                <div className="p-8 space-y-8 max-w-7xl mx-auto">
+                <div className="p-2 space-y-8 max-w-7xl mx-auto">
 
                     {/* Stats Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -109,21 +110,25 @@ const AdminDashboard = () => {  // ✅ accept logout prop
                                 Revenue Performance Flow
                             </h3>
                             <div className="h-[350px]">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={statsData?.monthlyRevenue}>
-                                        <defs>
-                                            <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.1} />
-                                                <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
-                                            </linearGradient>
-                                        </defs>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                                        <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} />
-                                        <YAxis stroke="#94a3b8" fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} />
-                                        <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', fontSize: '10px', fontWeight: 'bold' }} />
-                                        <Area type="monotone" dataKey="revenue" stroke="#4f46e5" fillOpacity={1} fill="url(#colorRev)" strokeWidth={4} />
-                                    </AreaChart>
-                                </ResponsiveContainer>
+
+                                {statsData?.monthlyRevenue && (
+                                    <ResponsiveContainer width="100%" height={350}>
+                                        <AreaChart data={statsData?.monthlyRevenue}>
+                                            <defs>
+                                                <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.1} />
+                                                    <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
+                                                </linearGradient>
+                                            </defs>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                                            <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} />
+                                            <YAxis stroke="#94a3b8" fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} />
+                                            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', fontSize: '10px', fontWeight: 'bold' }} />
+                                            <Area type="monotone" dataKey="revenue" stroke="#4f46e5" fillOpacity={1} fill="url(#colorRev)" strokeWidth={4} />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                )}
+
                             </div>
                         </div>
 
@@ -139,14 +144,14 @@ const AdminDashboard = () => {  // ✅ accept logout prop
                                     className="w-full bg-slate-50 hover:bg-slate-100 p-6 rounded-3xl border border-slate-100 transition-all text-left flex items-center justify-between group"
                                 >
                                     <span className="font-black uppercase tracking-widest text-[11px] text-slate-700">Add New Inventory</span>
-                                    <span className="text-indigo-600 group-hover:translate-x-1 transition-transform text-xl">🚀</span>
+                                    <span className="text-indigo-600 group-hover:translate-x-1 transition-transform text-xl"><RocketIcon /></span>
                                 </button>
                                 <button
                                     onClick={() => navigate('/admin/users')}
                                     className="w-full bg-slate-50 hover:bg-slate-100 p-6 rounded-3xl border border-slate-100 transition-all text-left flex items-center justify-between group"
                                 >
                                     <span className="font-black uppercase tracking-widest text-[11px] text-slate-700">Explorer Audit Log</span>
-                                    <span className="text-orange-600 group-hover:translate-x-1 transition-transform text-xl">📋</span>
+                                    <span className="text-orange-600 group-hover:translate-x-1 transition-transform text-xl"><ClipboardListIcon /></span>
                                 </button>
                             </div>
                         </div>
@@ -154,14 +159,6 @@ const AdminDashboard = () => {  // ✅ accept logout prop
                 </div>
             </main>
 
-            {isProfileOpen && (
-                <ProfileSidebar
-                    user={user}
-                    isOpen={isProfileOpen}
-                    onClose={() => setIsProfileOpen(false)}
-                    logout={logout}  // ✅ properly wired
-                />
-            )}
         </div>
     );
 };

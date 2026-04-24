@@ -1,20 +1,21 @@
 
 import './App.css'
+import 'animate.css';
 import { Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext';
-import Payment from './pages/admin/Payment';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast'
 import 'sweetalert2/dist/sweetalert2.min.css';
 import PublicRoutes from './routes/PublicRoutes';
 import UserRoutes from './routes/UserRoutes';
 import AdminRoutes from './routes/AdminRoutes';
+import { Payment } from "./pages/user/Payment"
+import Loading from './pages/Loading';
 
 
 
 export const APPNAME = "InexTrip"
 function App() {
-
   const [isloading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -29,27 +30,28 @@ function App() {
   return (
     <>
       <Toaster position="top-center" />
-      {/* <swal /> */}
-      {/* <new Swal /> */}
 
-      {/* {isloading ? (
+      <new Swal />
+
+      {isloading ? (
         <Loading />
-      ) : ( */}
+      ) : (
 
-      <AuthProvider>
+        <AuthProvider>
 
-        <Routes>
+          <Routes>
 
-          {PublicRoutes()}
-          {UserRoutes()}
-          {AdminRoutes()}
+            {PublicRoutes()}
+            {UserRoutes()}
+            {AdminRoutes()}
 
-          {/* Common */}
-          <Route path="/payment/:id" element={<Payment />} />
-        </Routes>
+            {/* Common */}
+            <Route path="/payment/:id" element={<Payment />} />
+          </Routes >
 
-      </AuthProvider>
-      {/* )} */}
+        </AuthProvider >
+      )
+      }
     </>
   )
 }

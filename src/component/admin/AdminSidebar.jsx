@@ -1,13 +1,15 @@
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { FaBolt, FaUsers, FaMap, FaMoneyBill, FaStar, FaEnvelope } from "react-icons/fa";
 
 const sidebarLinks = [
-    { path: '/admin/dashboard', label: 'Overview', icon: '⚡' },
-    { path: '/admin/users', label: 'Explorers', icon: '👥' },
-    { path: '/admin/trips', label: 'Inventory', icon: '🗺️' },
-    { path: '/admin/payments', label: 'Ledger', icon: '💰' },
-    { path: '/admin/reviews', label: 'Reviews', icon: '⭐' },
+    { path: '/overview', label: 'Overview', icon: <FaBolt className="text-amber-500 text-lg" /> },
+    { path: '/users', label: 'Explorers', icon: <FaUsers className="text-blue-400 text-lg" /> },
+    { path: '/trips', label: 'Inventory', icon: <FaMap className="text-green-400 text-lg" /> },
+    { path: '/payments', label: 'Payments', icon: <FaMoneyBill className="text-emerald-500 text-lg" /> },
+    { path: '/reviews', label: 'Reviews', icon: <FaStar className="text-orange-500 text-lg" /> },
+    { path: '/messages', label: 'Messages', icon: <FaEnvelope className="text-yellow-400 text-lg" /> },
 ];
 export default function AdminSidebar({ isCollapsed, onToggleSidebar }) {
     const navigate = useNavigate();
@@ -76,7 +78,10 @@ export default function AdminSidebar({ isCollapsed, onToggleSidebar }) {
                                 }`}
                         >
                             {/* ICON */}
-                            <span className="text-lg  ">{link.icon}</span>
+                            {/* <span className="text-lg  ">{link.icon}</span> */}
+                            <span className="text-lg group-hover:text-indigo-400 transition-all">
+                                {link.icon}
+                            </span>
 
                             {/* TEXT */}
                             {!isCollapsed && (

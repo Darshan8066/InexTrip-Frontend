@@ -1,5 +1,5 @@
 
-import  { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
@@ -78,8 +78,17 @@ const Register = () => {
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
 
                     {/* Text Content */}
-                    <div className="relative h-full flex flex-col justify-center items-center text-center p-12">
-                        <h2 className="text-4xl font-black text-white mb-8 leading-tight drop-shadow-2xl uppercase tracking-tighter">
+                    <div className="relative h-full flex flex-col items-center text-center justify-center gap-4 p-12 -translate-y-4">
+
+                        {/* Logo */}
+                        <div
+                            onClick={() => navigate("/")}
+                            className="px-6 py-2 rounded-full text-white font-bold text-base tracking-wide bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 shadow-lg shadow-purple-500/30 bg-white/10 backdrop-blur-md border border-white/20 hover:scale-105 hover:shadow-xl transition-all duration-300">
+                            INEXTRIP
+                        </div>
+
+                        {/* Heading */}
+                        <h2 className="text-4xl font-black text-white leading-tight drop-shadow-2xl uppercase tracking-tighter">
                             START YOUR <br /> JOURNEY WITH AI
                         </h2>
 
@@ -201,5 +210,4 @@ const Register = () => {
     );
 };
 
-// Exporting component
 export default Register;

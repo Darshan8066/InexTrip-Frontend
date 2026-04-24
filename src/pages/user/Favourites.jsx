@@ -1,11 +1,8 @@
 import  { useState, useEffect } from 'react';
-import { Navbar } from '../../component/layouts/Navbar';
 import Footer from '../../component/layouts/Footer';
 import TripCard from '../../component/common/TripCard';
 import { Link } from 'react-router-dom';
 import useTrips from '../../hooks/useTrips';
-// import toast from 'react-hot-toast';
-
 
 const Favourites = () => {
 
@@ -26,7 +23,6 @@ const Favourites = () => {
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col">
-            <Navbar user={currentUser} onLogout={() => { }} />
             <main className="max-w-7xl mx-auto px-4 py-16 w-full flex-grow">
                 <h1 className="text-5xl font-black text-slate-900 mb-2">My Favourites</h1>
                 <p className="text-xl text-slate-500 font-medium mb-12 uppercase tracking-widest">Trips you've marked for future exploration.</p>

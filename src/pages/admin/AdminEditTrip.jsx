@@ -9,6 +9,8 @@ import ProfileSidebar from '../../component/layouts/ProfileSidebar.jsx';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { fetchTripById, updateTrip } from '../../services/tripServices.js';
+import Swal from "sweetalert2";
+import { toast } from "react-hot-toast";
 
 const AdminEditTrip = () => {
   const { id } = useParams();
@@ -46,9 +48,19 @@ const AdminEditTrip = () => {
       description: Yup.string(),
     }),
     onSubmit: async (values) => {
+      const confirmUpdate = await Swal.fire({
+        title: "Update this trip?",
+        text: "Changes will be saved permanently.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#6366f1",
+        cancelButtonColor: "#64748b",
+        confirmButtonText: "Yes, update it!"
+      });
+
+      if (!confirmUpdate.isConfirmed) return;
       const tripPayload = {
         createdBy: user._id,
-        createdAt: Date.now(),
         tripType: 'JOIN',
         from: values.from,
         to: values.to,
@@ -72,10 +84,15 @@ const AdminEditTrip = () => {
 
       try {
         await updateTrip(id, tripPayload);
-        alert("Inventory package updated successfully.");
-        navigate('/admin/trips');
+        toast.success("Trip updated successfully 🚀");
+        navigate('/trips');
       } catch (err) {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Update Failed",
+          text: err.message,
+          confirmButtonColor: "#ef4444"
+        });
       }
     },
   });
@@ -104,11 +121,11 @@ const AdminEditTrip = () => {
             dayPlan: trip.dayPlan || []
           });
         } else {
-          navigate('/admin/trips');
+          navigate('/trips');
         }
       } catch (err) {
         console.error(err);
-        navigate('/admin/trips');
+        navigate('/trips');
       } finally {
         setLoading(false);
       }
@@ -159,7 +176,7 @@ const AdminEditTrip = () => {
           onProfileClick={() => setIsProfileOpen(true)}
         />
         <button
-          onClick={() => navigate('/admin/trips')}
+          onClick={() => navigate('/trips')}
           className="flex my-3 mx-3 gap-2 bg-white text-slate-600 px-5 py-4 border border-slate-200 rounded-2xl font-black text-[10px] hover:bg-slate-50 uppercase tracking-widest shadow-sm transition-all"
         >
           <ArrowLeft size={14} />

@@ -21,14 +21,29 @@ body {
   background: white;
 }
 
-/* Only apply where needed */
-/* @layer utilities {
-  .::-webkit-scrollbar {
-    display: none;
-  }
+html,
+body {
+  overflow-x: hidden;
+}
 
-  . {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-} */
+/* Related trips */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+
+.keen-slider {
+  display: flex;
+  align-items: stretch;
+  background: #f8fafc; /* same as your page bg */
+}
+
+.keen-slider__slide {
+  min-width: 0;
+}

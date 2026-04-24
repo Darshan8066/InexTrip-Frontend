@@ -36,7 +36,7 @@ const TripCard = ({ trip, isAuthenticated, onBookClick }) => {
       await toggleFavourite({ tripId: trip._id });
 
       // ✅ update global user
-      const updatedUser = { ...user, favourites: updatedFavs }; 
+      const updatedUser = { ...user, favourites: updatedFavs };
       setUser(updatedUser);
 
       sessionStorage.setItem("user", JSON.stringify(updatedUser));             // ✅ sync with sessionStorage
@@ -100,16 +100,18 @@ const TripCard = ({ trip, isAuthenticated, onBookClick }) => {
           {isAuthenticated ? (
             <Link
               to={`/trip/${trip._id}`}
-              className="block w-full text-center bg-blue-600 text-black py-3.5 rounded-2xl font-bold text-white hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100"
+              className="group relative block w-full text-center bg-indigo-600 text-white py-4 rounded-2xl font-black text-sm transition-all shadow-xl shadow-indigo-100 overflow-hidden"
             >
-              View Plan
+              <span className="relative z-10">View Detailed Plan</span>
+              <div className="absolute inset-0 bg-indigo-700 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </Link>
           ) : (
             <button
               onClick={onBookClick}
-              className="block w-full text-center bg-blue-600 text-black py-3.5 rounded-2xl font-bold text-white hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100"
+              className="group relative block w-full text-center bg-indigo-600 text-white py-4 rounded-2xl font-black text-sm transition-all shadow-xl shadow-indigo-100 overflow-hidden"
             >
-              Book Adventure
+              <span className="relative z-10">Book Adventure</span>
+              <div className="absolute inset-0 bg-indigo-700 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </button>
           )}
         </div>

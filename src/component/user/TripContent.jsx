@@ -40,7 +40,7 @@ export default function TripContent({ trip }) {
                                                     </li>
                                                 ))}
                                             </ul>
-                                            <div className="pt-6 mt-6 border-t flex flex-wrap gap-2 overflow-x-auto">
+                                            <div className="pt-6 mt-6 border-t flex flex-wrap gap-2 overflow-x-hidden">
                                                 <div className="px-4 py-2 bg-indigo-50 rounded-2xl text-xs font-black text-indigo-600 uppercase">☕ Breakfast: {day.meals.breakfast}</div>
                                                 <div className="px-4 py-2 bg-indigo-50 rounded-2xl text-xs font-black text-indigo-600 uppercase">🍲 Lunch: {day.meals.lunch}</div>
                                                 <div className="px-4 py-2 bg-indigo-50 rounded-2xl text-xs font-black text-indigo-600 uppercase">🌃 Dinner: {day.meals.dinner}</div>

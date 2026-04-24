@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { string, object } from 'yup';
@@ -14,23 +14,23 @@ const Login = () => {
 
   const token = sessionStorage.getItem("token");
 
-if (token) {
-  try {
-    const decoded = jwtDecode(token);
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
 
-    if (decoded.exp > Date.now() / 1000) {
-      return <Navigate to={
-        decoded.role === "ADMIN"
-          ? "/admin/dashboard"
-          : "/dashboard"
-      } replace />;
-    } else {
+      if (decoded.exp > Date.now() / 1000) {
+        return <Navigate to={
+          decoded.role === "ADMIN"
+            ? "/dashboard"
+            : "/dashboard"
+        } replace />;
+      } else {
+        sessionStorage.removeItem("token");
+      }
+    } catch {
       sessionStorage.removeItem("token");
     }
-  } catch {
-    sessionStorage.removeItem("token");
   }
-}
 
   const initialValues = {
     email: "",
@@ -59,7 +59,7 @@ if (token) {
 
         // ✅ 3. Redirect
         if (res.user.role === "ADMIN") {
-          navigate("/admin/dashboard");
+          navigate("/overview");
         } else {
           navigate("/dashboard");
         }
@@ -117,8 +117,15 @@ if (token) {
 
         {/* Right Pane - Form */}
         <div className="md:w-1/2 bg-slate-800 z-10 p-12 md:p-16 flex flex-col justify-center">
-          <div className="mb-10 text-center">
-            <h1 className="text-white text-3xl font-black tracking-widest uppercase mb-2">
+          <div className="mb-10 flex items-center justify-center gap-3">
+            <div
+              onClick={() => navigate('/')}
+              className="w-10 h-10 bg-indigo-700 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg cursor-pointer"
+            >
+              I
+            </div>
+
+            <h1 className="text-white text-3xl font-black tracking-widest uppercase">
               INEXTRIP
             </h1>
           </div>

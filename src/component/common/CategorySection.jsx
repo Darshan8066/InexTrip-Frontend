@@ -1,7 +1,11 @@
+import { useAuth } from "../../context/AuthContext";
+import useTrips from "../../hooks/useTrips";
 import TripCard from "./TripCard"
 import { Link } from 'react-router-dom';
 
-export default function CategorySection({ user, trips, onBookClick, setActiveCategory, activeCategory, cat }) {
+export default function CategorySection({ onBookClick, setActiveCategory, activeCategory, cat }) {
+    const { user } = useAuth();
+    const { trips } = useTrips();
 
     const getTripsByCategory = (catName) => {
         if (!catName) return [];
@@ -36,12 +40,11 @@ export default function CategorySection({ user, trips, onBookClick, setActiveCat
                             Clear Filter
                         </button>
                     )}
-                    <Link to="/join-trip" className="px-10 py-3 bg-indigo-50 border-2 border-indigo-100 text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-sm">Discover All {cat?.name} &rarr;</Link>
+                    <Link to="/join-trip" state={{ selectedCategory: cat?.name }} className="px-10 py-3 bg-indigo-50 border-2 border-indigo-100 text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-sm">Discover All {cat?.name} &rarr;</Link>
                 </div>
             </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-                {getTripsByCategory(cat?.name).map(trip => (
+                {getTripsByCategory(cat.name)?.map(trip => (
                     <TripCard
                         key={trip._id}
                         trip={trip}
@@ -51,7 +54,7 @@ export default function CategorySection({ user, trips, onBookClick, setActiveCat
                         onRefresh={() => { }}
                     />
                 ))}
-                {getTripsByCategory(cat?.name).length === 0 && (
+                {getTripsByCategory(cat?.name)?.length === 0 && (
                     <div className="col-span-full py-24 bg-indigo-50/30 rounded-[48px] border-4 border-dashed border-indigo-100 text-center">
                         <p className="font-black text-indigo-300 uppercase tracking-widest text-xs">Expanding our {cat?.name} reach...</p>
                     </div>

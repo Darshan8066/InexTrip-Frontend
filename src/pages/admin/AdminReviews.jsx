@@ -1,18 +1,13 @@
 
-import React, { useState, useEffect } from 'react';
-// import { User, Review, Trip } from '../types';
-// import { apiService } from '../services/apiService';
-// import { motion, AnimatePresence } from 'motion/react';
-// import { Link, useNavigate, useLocation } from 'react-router-dom';
-
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { fetchReview } from '../../services/reviewServices';
-
-
 import { AnimatePresence, motion } from 'motion/react';
+
 import AdminHeader from '../../component/admin/AdminHeader';
 import AdminSidebar from '../../component/admin/AdminSidebar';
 import ProfileSidebar from '../../component/layouts/ProfileSidebar';
+import { Search } from 'lucide-react';
 
 
 const AdminReviews = () => {
@@ -33,7 +28,6 @@ const AdminReviews = () => {
     const loadData = async () => {
       try {
         const response = await fetchReview();
-        console.log("fetchReviews:", response.reviews)
         setReviews(response.reviews);
 
       } catch (err) {
@@ -51,18 +45,17 @@ const AdminReviews = () => {
   };
 
   const getTripName = (tripId) => {
-    console.log("tripId", tripId);
-    console.log(`${tripId.from} to ${tripId.to}`);
-    return tripId ? `${tripId.from} to ${tripId.to}` : 'Unknown Trip';
+    return tripId ? `${tripId?.from} to ${tripId.to}` : 'Unknown Trip';
   };
 
   const filteredReviews = reviews.filter(review => {
-    const category = getTripCategory(review.tripId);
-    const tripName = getTripName(review.tripId);
+    const category = getTripCategory(review?.tripId);
+    const tripName = getTripName(review?.tripId);
     const matchesCategory = filterCategory === 'All' || category === filterCategory;
-    const matchesSearch = tripName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.comment.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesSearch = tripName?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+      review?.fullname?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+      review?.comment?.toLowerCase()?.includes(searchTerm?.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -84,7 +77,7 @@ const AdminReviews = () => {
 
         <AdminHeader
           title="Review Management "
-          subtitle="Monitor explorer feedback"
+          subtitle={`Total Reviews : ${reviews.length}`}
           user={user}
           onProfileClick={() => setIsProfileOpen(true)}
 
@@ -111,16 +104,15 @@ const AdminReviews = () => {
             </div>
 
             {/* Search */}
-            <div className="relative w-full md:w-[350px] lg:w-[420px]">
+            <div className="relative text-slate-400 w-full md:w-[350px] lg:w-[420px]">
+              <Search className='relative left-3 top-8.5 w-5 h-5 text-slate-400 ' />
               <input
-                type="text"
+                type="search"
                 placeholder="Search reviews..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all duration-200 font-semibold text-slate-700 text-sm shadow-sm" />
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-                🔍
-              </span>
+                onChange={(e) => setSearchTerm(e?.target?.value)}
+                className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all duration-200 font-bold text-slate-700 text-sm shadow-lg" />
+
             </div>
 
           </div>
@@ -193,19 +185,15 @@ const AdminReviews = () => {
                         </div>
                       </div>
                       <div className="bg-gradient-to-br from-slate-50 to-slate-100 px-3 py-1.5 rounded-xl text-[8px] font-black text-slate-400 uppercase tracking-widest">
-                        {new Date(review.date).toLocaleDateString('en-GB')}
+                        {new Date(review.createdAt).toLocaleDateString('en-GB')}
                       </div>
                     </div>
 
                     <div className="mb-6 relative z-10">
                       <div className="flex items-center gap-2 mb-3">
                         <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
-                        {/* <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">tripId</span> */}
-                        {/* <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{review.tripId}</span> */}
                         <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{getTripCategory(review?.tripId)}</span>
                       </div>
-                      {/* <h5 className="text-sm font-black text-slate-800 mb-4 line-clamp-1">tripId</h5> */}
-                      {/* <h5 className="text-sm font-black text-slate-800 mb-4 line-clamp-1">{review.tripId}</h5> */}
                       <h5 className="text-sm font-black text-slate-800 mb-4 line-clamp-1">{getTripName(review?.tripId)}</h5>
                       <p className="text-slate-500 font-bold text-sm leading-relaxed  line-clamp-3">
                         "{review?.comment}"

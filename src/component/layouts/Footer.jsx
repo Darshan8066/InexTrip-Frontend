@@ -25,10 +25,10 @@ const Footer = () => {
               <span className="absolute -bottom-3 left-0 w-8 h-1 bg-indigo-600 rounded-full" />
             </h4>
             <ul className="space-y-4 text-sm font-bold">
-              <li><Link to="/join-trip" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">Join Group Tours</Link></li>
-              <li><Link to="/destinations" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">Global Destinations</Link></li>
-              <li><Link to="/create-trip" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">AI Itinerary Engine</Link></li>
-              <li><Link to="/history" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">My Journey Log</Link></li>
+              <li><Link to="/login" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">Join Group Tours</Link></li>
+              <li><Link to="/login" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">Global Destinations</Link></li>
+              <li><Link to="/login" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">AI Itinerary Engine</Link></li>
+              <li><Link to="/login" className="hover:text-indigo-400 transition-all hover:translate-x-1 inline-block">My Journey Log</Link></li>
             </ul>
           </div>
 
@@ -39,10 +39,10 @@ const Footer = () => {
               <span className="absolute -bottom-3 left-0 w-8 h-1 bg-emerald-500 rounded-full" />
             </h4>
             <ul className="space-y-4 text-sm font-bold">
-              <li><a href="#" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Help Center</a></li>
-              <li><a href="#" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Safety Protocols</a></li>
-              <li><a href="#" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Booking Terms</a></li>
-              <li><a href="#" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Privacy Policy</a></li>
+              <li><a href="/contact" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Help Center</a></li>
+              <li><a href="/about" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Safety Protocols</a></li>
+              <li><a href="/login" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Booking Terms</a></li>
+              <li><a href="/privacy-policy" className="hover:text-emerald-400 transition-all hover:translate-x-1 inline-block">Privacy Policy</a></li>
             </ul>
           </div>
 
@@ -79,15 +79,17 @@ const Footer = () => {
         </div>
 
         <div className="pt-12 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-700">
+            <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Global Nodes Online</span>
+            </div>
           <div className="flex items-center gap-6">
             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-600">
               &copy; 2026 TripPlanner AI Engineering Group.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-700">
-            <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Global Nodes Online</span>
+            
             <span>Uptime 99.9%</span>
-            <span>Project Exhibition v2.0</span>
           </div>
         </div>
       </div>

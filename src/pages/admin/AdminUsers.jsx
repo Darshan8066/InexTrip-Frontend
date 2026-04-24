@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
-import ProfileSidebar from '../../component/layouts/ProfileSidebar';
 import { deleteUserbyId, fetchUser } from '../../services/authService';
-import AdminSidebar from '../../component/admin/AdminSidebar';
 import { useAuth } from '../../context/AuthContext';
+
+import ProfileSidebar from '../../component/layouts/ProfileSidebar';
+import AdminSidebar from '../../component/admin/AdminSidebar';
 import AdminHeader from '../../component/admin/AdminHeader';
 import Swal from 'sweetalert2';
 
@@ -31,7 +32,6 @@ const AdminUsers = () => {
     const loadUsers = async () => {
         try {
             const res = await fetchUser();
-            console.log("user data : ", res.users);
             setUsers(res.users);
         } catch (err) {
             Swal.fire({ title: "Error", text: err.message, icon: "error" });
@@ -104,8 +104,8 @@ const AdminUsers = () => {
             >
 
                 <AdminHeader
-                    title="Command Center"
-                    subtitle="Live Operational Hub"
+                    title="Explorer Registry"
+                    subtitle={`Population :${users.length}`}
                     user={user}
                     onProfileClick={() => setIsProfileOpen(true)}
                 />
@@ -155,7 +155,7 @@ const AdminUsers = () => {
                                             <td className="px-10 py-6 text-right">
                                                 <div className="flex justify-end gap-3">
                                                     <button
-                                                        onClick={() => navigate(`/admin/users/profile/${u._id}`)}
+                                                        onClick={() => navigate(`/users/profile/${u._id}`)}
                                                         className="bg-indigo-50 text-indigo-600 px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
                                                     >
                                                         View Profile

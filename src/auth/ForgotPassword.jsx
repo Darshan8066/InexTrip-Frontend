@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { string, object } from 'yup';
 import axios from '../services/axios';
@@ -7,11 +7,14 @@ import Swal from 'sweetalert2';
 import { APPNAME } from '../App';
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const { handleSubmit, handleBlur, handleChange, errors, touched, isSubmitting } = useFormik({
     initialValues: { email: '' },
     validationSchema: object({
       email: string().email('Invalid email address').required('Email is required'),
     }),
+
+
     onSubmit: async (values, { resetForm }) => {
       try {
         await axios.post('/api/auth/forgot-password', { email: values.email });
@@ -49,13 +52,29 @@ const ForgotPassword = () => {
       <div className="relative z-10 max-w-md w-full rounded-[30px] overflow-hidden shadow-2xl backdrop-blur-lg bg-white/5">
         <div className="bg-slate-800 p-12 flex flex-col justify-center">
 
-          <div className="mb-10 text-center">
-            <h1 className="text-white text-3xl font-black tracking-widest uppercase mb-2">
-              {APPNAME}
-            </h1>
-            <p className="text-white/60 text-xs font-bold uppercase tracking-widest">
+          <div className="flex flex-col items-center mb-6">
+
+            {/* Top Row: Logo + Name */}
+            <div className="flex items-center gap-4">
+              <div
+                onClick={() => navigate('/')}
+                className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 
+      rounded-2xl flex items-center justify-center text-white font-black text-xl 
+      shadow-lg shadow-purple-500/30 cursor-pointer"
+              >
+                I
+              </div>
+
+              <h1 className="text-white text-3xl font-black tracking-widest uppercase">
+                {APPNAME}
+              </h1>
+            </div>
+
+            {/* BELOW TEXT */}
+            <p className="mt-3 text-white/60 text-xs font-bold uppercase tracking-widest text-center">
               Forgot your password?
             </p>
+
           </div>
 
           <p className="text-white/50 text-sm text-center mb-8 leading-relaxed">

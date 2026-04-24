@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ProfileSidebar from "../../component/layouts/ProfileSidebar";
-import { fetchTrip, deleteTrip } from "../../services/tripServices";
+import { deleteTrip, fetchTripWithPagination } from "../../services/tripServices";
 import AdminSidebar from "../../component/admin/AdminSidebar";
 import { useAuth } from "../../context/AuthContext";
 import TripForm from "../../component/admin/TripForm";
@@ -10,6 +10,9 @@ import { TripPhotos } from "../../component/user/TripPhotos";
 import TripContent from "../../component/user/TripContent";
 import ReviewSection from "../../component/user/ReviewSection";
 import RelatedTrips from "../../component/user/RelatedTrips";
+import { BiSearch } from "react-icons/bi";
+import Swal from "sweetalert2";
+import { toast } from "react-hot-toast";
 
 const TRIPS_PER_PAGE = 6;
 
@@ -25,7 +28,7 @@ export const AdminTrips = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -38,7 +41,8 @@ export const AdminTrips = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchTrip({ page, limit: TRIPS_PER_PAGE });
+      const data = await fetchTripWithPagination({ page, limit: TRIPS_PER_PAGE });
+      console.log("trip data :", data)
       setTrips(data.trips);
       setTotalTrips(data.totalTrips);
       setTotalPages(data.totalPages);
@@ -75,14 +79,25 @@ export const AdminTrips = () => {
 
 
   const handleEditTrip = (trip) => {
-    navigate(`/admin/trips/edit/${trip._id}`);
+    navigate(`/trips/edit/${trip._id}`);
   };
 
-  const handleDeleteTrip = async (id) => {
-    if (!window.confirm("Are you sure you want to permanently delete this trip?")) return;
+  const handleDeleteTrip = async (id, tripType) => {
+    const confirmDelete = await Swal.fire({
+      title: "Delete this trip?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#64748b",
+      confirmButtonText: "Yes, delete it!"
+    });
+
+    if (!confirmDelete.isConfirmed) return;
     try {
       setDeletingId(id);
-      await deleteTrip(id);
+      await deleteTrip(id, tripType);
+      toast.success("Trip deleted successfully 🚀");
       // After delete: if this was the last item on the page, go back one page
       const newTotal = totalTrips - 1;
       const newTotalPages = Math.ceil(newTotal / TRIPS_PER_PAGE);
@@ -90,7 +105,12 @@ export const AdminTrips = () => {
       await loadPage(targetPage);
       setCurrentPage(targetPage);
     } catch (err) {
-      alert(err.message);
+      Swal.fire({
+        icon: "error",
+        title: "Delete Failed",
+        text: err.message,
+        confirmButtonColor: "#ef4444"
+      });
     } finally {
       setDeletingId(null);
     }
@@ -119,8 +139,14 @@ export const AdminTrips = () => {
     document.body.style.overflow = "hidden";
   }, []);
 
+  const filteredTrips = trips.filter((trip) =>
+    `${trip.from} ${trip.to} ${trip.tripType}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-slate-50 flex text-slate-900">
+    <div className="h-screen  bg-slate-50 flex text-slate-900">
 
       <AdminSidebar
         isCollapsed={isCollapsed}
@@ -128,13 +154,7 @@ export const AdminTrips = () => {
       />
 
       <main
-        className={`
-    flex-grow 
-    h-screen
-    overflow-y-auto   // ✅ IMPORTANT
-    transition-all duration-300
-    ${isCollapsed ? "ml-20" : "ml-72"}
-  `}
+        className={`flex-grow overflow-y-auto transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"}`}
       >
         <AdminHeader
           title="Inventory Control"
@@ -163,6 +183,40 @@ export const AdminTrips = () => {
             </div>
           )}
 
+
+          <div className="py-6 flex items-center justify-between gap-4">
+            <div className="relative w-[380px] group">
+
+              {/* Gradient Border Glow */}
+              <div className="absolute -inset-[1px] rounded-2xl  from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-focus-within:opacity-100 blur-sm transition duration-500"></div>
+
+              {/* Main Input Container */}
+              <div className="relative flex items-center bg-white/70  rounded-2xl border border-slate-200 transition-all duration-300 group-focus-within:shadow-md">
+
+                {/* Icon */}
+                <BiSearch className="ml-4 text-slate-400 text-xl group-focus-within:text-indigo-500 transition" />
+
+                {/* Input */}
+                <input
+                  type="text"
+                  placeholder="Search destinations, trips..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="flex-1 px-3 py-3 bg-transparent outline-none text-sm text-slate-700 placeholder:text-slate-400"
+                />
+
+                {/* Clear Button */}
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="mr-3 text-slate-400 hover:text-red-500 transition text-sm"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
           {/* Error state */}
           {error && (
             <div className="mb-4 px-5 py-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-600 text-sm font-bold">
@@ -193,7 +247,7 @@ export const AdminTrips = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {trips.map((trip) => (
+              {filteredTrips.map((trip) => (
                 <div key={trip._id} className="bg-white rounded-[28px] overflow-hidden border border-slate-200 flex flex-col group shadow-sm hover:border-indigo-400 hover:shadow-md transition-all duration-300"
                 >
                   {/* Image */}
@@ -239,14 +293,13 @@ export const AdminTrips = () => {
 
                     <div className="flex gap-3 pt-4 border-t border-slate-100">
                       <button
-                        // onClick={() => navigate(`/trip/${trip._id}`)}
                         onClick={() => setSelectedTrip(trip)}
                         className="flex-1 bg-slate-50 py-2.5 rounded-xl text-[9px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-100 hover:text-indigo-600 transition-all"
                       >
                         Review
                       </button>
                       <button
-                        onClick={() => handleDeleteTrip(trip._id)}
+                        onClick={() => handleDeleteTrip(trip._id, trip.tripType)}
                         disabled={deletingId === trip._id}
                         className="flex-1 bg-rose-50 py-2.5 rounded-xl text-[9px] font-black text-rose-500 uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -260,7 +313,6 @@ export const AdminTrips = () => {
           )}
 
           {/* ── Pagination ────────────────────────────────────────────────── */}
-          {/* {totalPages > 1 && !loading && ( */}
           {!selectedTrip && totalPages > 1 && !loading && (
             <div className="flex items-center justify-center gap-2 mt-10">
               <button

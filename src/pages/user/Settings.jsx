@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import { Navbar } from '../../component/layouts/Navbar';
 import Footer from '../../component/layouts/Footer';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +10,7 @@ import toast from 'react-hot-toast';
 
 export const Settings = () => {
 
-    const { user, logout } = useAuth();
+    const { user, logout, setUser } = useAuth();
     const navigate = useNavigate();
     const [passwordData, setPasswordData] = useState({
         currentPassword: '',
@@ -34,6 +33,13 @@ export const Settings = () => {
 
             return;
         }
+        // if (passwordData.currentPassword !== passwordData.newPassword) {
+        //     setMessage({ type: 'error', text: 'Your new password cannot be same as old password.' });
+
+        //     toast.error("Your new password cannot be same as old password. ❌");
+
+        //     return;
+        // }
 
         try {
             await updateUser({
@@ -60,17 +66,16 @@ export const Settings = () => {
         try {
             await updateUser({ mobile: mobileData.newMobile });
 
-            setMessage({ type: 'success', text: 'Mobile number updated successfully!' });
-
+            // ✅ update UI instantly
+            setUser(prev => ({
+                ...prev,
+                mobile: mobileData.newMobile
+            }));
             toast.success("Mobile updated successfully 📱");
-
         } catch (err) {
-            setMessage({ type: 'error', text: err.message });
-
             toast.error(err.message || "Something went wrong ❌");
         }
     };
-
     const handleDeleteAccount = async () => {
 
         const result = await Swal.fire({
@@ -116,7 +121,6 @@ export const Settings = () => {
 
     return (
         <div className="min-h-screen flex flex-col bg-[#f8fafc]">
-            <Navbar user={user} logout={logout} />
 
             <main className="flex-grow py-12 px-4 md:px-6">
                 <div className="max-w-5xl mx-auto">
@@ -160,7 +164,7 @@ export const Settings = () => {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Account ID</p>
-                                        <p className="text-[10px] font-mono text-slate-400 bg-slate-50 p-2 rounded-lg">{user?._id}</p>
+                                        <p className="text-[12px] font-mono text-slate-400 bg-slate-50 p-2 rounded-lg">{user?._id}</p>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +281,7 @@ export const Settings = () => {
                 </div>
             </main>
 
-            <Footer />
+            {user?.role !== "ADMIN" && <Footer />}
         </div>
     );
 };

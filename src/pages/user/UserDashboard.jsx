@@ -1,22 +1,16 @@
 
 import { useState } from 'react';
-
-
-
 import { useNavigate } from 'react-router-dom';
-
-import CategorySection from '../../component/common/CategorySection';
-import useTrips from '../../hooks/useTrips';
 import { categoriesConst } from '../../constants/categories';
 import { useAuth } from '../../context/AuthContext';
-import { Navbar } from '../../component/layouts/Navbar';
+import CategorySection from '../../component/common/CategorySection';
+import useTrips from '../../hooks/useTrips';
 import Footer from '../../component/layouts/Footer';
-
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { trips, loading, error } = useTrips();
-  const { user, loadingUser, logout } = useAuth();
+  const { user, loadingUser } = useAuth();
   const [activeCategory, setActiveCategory] = useState(null);
 
   const firstName = user?.fullname?.split(" ")[0] || "Explorer";
@@ -24,14 +18,56 @@ const Dashboard = () => {
     return <div className="text-center py-20">Loading user...</div>;
   }
   if (loading) {
-    return <div className="text-center py-20">Loading trips...</div>;
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-6">
+
+        {/* Spinner */}
+        <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+
+        {/* Text */}
+        <p className="text-slate-500 font-semibold text-lg">
+          Fetching amazing trips for you...
+        </p>
+
+      </div>
+    );
   }
+
   if (error) {
-    return <div className="text-center py-20 text-red-500">{error}</div>;
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center px-6">
+
+        <div className="bg-white rounded-3xl shadow-xl p-10 max-w-md w-full text-center border border-red-100">
+
+          {/* Icon */}
+          <div className="text-5xl mb-4">⚠️</div>
+
+          {/* Title */}
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">
+            Something went wrong
+          </h2>
+
+          {/* Message */}
+          <p className="text-slate-500 mb-6">
+            {error || "Unable to load trips. Please try again."}
+          </p>
+
+          {/* Button */}
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:scale-105 transition"
+          >
+            Try Again
+          </button>
+
+        </div>
+
+      </div>
+    );
   }
+  const categories = categoriesConst;
   return (
-  <div className="min-h-screen flex flex-col bg-gray-200">
-      <Navbar logout={logout} />
+    <div className="min-h-screen flex flex-col bg-gray-200">
       <main className="flex-grow overflow-y-auto ">
         {/* Top Header Section with Blue/Indigo Sunset Gradient */}
         <div className="bg-gradient-to-t from-gray-200 to-gray-100 via-gray-100 to-gray py-16 px-6">
@@ -114,23 +150,63 @@ const Dashboard = () => {
         {/* Category Icons Bar (Matching reference image 3) */}
         <section className="relative z-20 max-w-5xl mx-auto px-4 -mt-24">
           <div className="bg-slate-200 rounded-[40px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-slate-00 p-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {categories.map((cat) => {
+              const Icon = cat.icon;
 
-            {categoriesConst.map((cat) => (
+              const themeStyles = {
+                indigo: "bg-indigo-100 text-indigo-600",
+                blue: "bg-blue-100 text-blue-600",
+                emerald: "bg-emerald-100 text-emerald-600",
+                orange: "bg-orange-100 text-orange-600",
+              };
 
-              <button
-                key={cat.name}
-                onClick={() => {
-                  setActiveCategory(cat.name);
-                  const el = document.getElementById(`section-${cat.name.toLowerCase()}`);
-                  el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }}
-                className={`group flex flex-col items-center p-8 rounded-[32px] transition-all border-2 ${activeCategory === cat.name ? 'bg-indigo-50 border-indigo-400' : 'bg-transparent border-transparent hover:bg-slate-300'
-                  }`}
-              >
-                <span className="text-5xl mb-4 group-hover:scale-125 transition-transform duration-500">{cat.icon}</span>
-                <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] group-hover:text-indigo-600 transition-colors">{cat.name}</span>
-              </button>
-            ))}
+              return (
+                <button
+                  key={cat.name}
+                  onClick={() => {
+                    setActiveCategory(cat.name);
+
+                    setTimeout(() => {
+                      const section = document.getElementById(`section-${cat.name.toLowerCase()}`);
+
+                      if (section) {
+                        const navbar = document.querySelector("nav"); // or your navbar class
+                        const navbarHeight = navbar?.offsetHeight || 100;
+
+                        const y =
+                          section.getBoundingClientRect().top +
+                          window.pageYOffset -
+                          navbarHeight -
+                          10; // small gap
+
+                        if (!section) {
+                          console.warn("Section not found:", cat.name);
+                          return;
+                        }
+
+                        window.scrollTo({
+                          top: y,
+                          behavior: "smooth",
+                        });
+                      }
+                    }, 50);
+                  }}
+                  className="group flex flex-col items-center rounded-2xl transition-all hover:scale-105"
+                >
+                  {/* ICON BOX */}
+                  <div
+                    className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center rounded-2xl shadow-md ${themeStyles[cat.theme]} group-hover:shadow-xl transition`}
+                  >
+                    <Icon size={32} weight="duotone" />
+                  </div>
+
+                  {/* TEXT */}
+                  <span className="text-[11px] mt-4 font-black text-slate-500 uppercase tracking-[0.2em] group-hover:text-indigo-600 transition-colors">
+                    {cat.name}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </section>
 

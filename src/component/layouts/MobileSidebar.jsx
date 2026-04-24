@@ -10,7 +10,8 @@ import {
     Home,
     Info,
     Briefcase,
-    Mail
+    Mail,
+    Shield
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -29,6 +30,7 @@ export const MobileSidebar = ({ isOpen, onClose }) => {
         { label: 'Services', path: '/services', icon: Briefcase },
         { label: 'About', path: '/about', icon: Info },
         { label: 'Contact', path: '/contact', icon: Mail },
+         { label: 'Privacy', path: '/privacy-policy', icon: Shield },
     ];
 
     const handleNavigate = (path) => {

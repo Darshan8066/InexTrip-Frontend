@@ -17,7 +17,7 @@ const UserReviews = () => {
         try {
             setLoading(true);
             const res = await fetchUserReviews();
-            console.log("fetchMyReviews : ",res)
+            console.log("fetchMyReviews : ", res)
             setReviews(res.reviews);
         } catch (error) {
             console.error('Error fetching reviews:', error);
@@ -134,6 +134,7 @@ const UserReviews = () => {
                                         transition={{ delay: idx * 0.1 }}
                                         className="bg-white p-10 rounded-[48px] shadow-xl shadow-slate-200/30 border border-slate-50 flex flex-col group hover:shadow-2xl transition-all"
                                     >
+                                        <p className="text-xl font-black text-slate-900 mb-2">{review.tripId.to}</p>
                                         <div className="flex justify-between items-start mb-8">
                                             <div className="flex text-amber-400 text-sm">
                                                 {[...Array(5)].map((_, i) => (
@@ -141,7 +142,7 @@ const UserReviews = () => {
                                                 ))}
                                             </div>
                                             <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">
-                                                {new Date(review.date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                {new Date(review.createdAt).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
                                             </span>
                                         </div>
                                         <div className="flex-grow mb-8">
@@ -157,11 +158,11 @@ const UserReviews = () => {
                                                 </div>
                                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Adventure Review</span>
                                             </div>
-                                            <button className="text-indigo-600 hover:text-indigo-700 transition-colors">
+                                            {/* <button className="text-indigo-600 hover:text-indigo-700 transition-colors">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </motion.div>
                                 ))}

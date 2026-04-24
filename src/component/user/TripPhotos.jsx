@@ -2,27 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchTripById } from "../../services/tripServices";
 
-// export const TripPhotos = ({ trip }) => {
-// const { id } = useParams();
-
-// const [trip, setTrip] = useState(null);
-// const [showGallery, setShowGallery] = useState(false);
-// const [activeImage, setActiveImage] = useState(0);
-
-// fetch trip inside component
-// useEffect(() => {
-//     const loadTrip = async () => {
-//         try {
-//             const res = await fetchTripById(id);
-//             setTrip(res.trip);
-//         } catch (err) {
-//             console.error(err);
-//         }
-//     };
-
-//     loadTrip();
-// }, [id]);
-
 export const TripPhotos = ({ trip: propTrip }) => {
     const { id } = useParams();
     const [trip, setTrip] = useState(propTrip || null);
@@ -38,6 +17,10 @@ export const TripPhotos = ({ trip: propTrip }) => {
             loadTrip();
         }
     }, [id, propTrip]);
+    
+    useEffect(() => {
+        setTrip(propTrip);
+    }, [propTrip]);
 
     if (!trip) {
         return (
@@ -67,7 +50,7 @@ export const TripPhotos = ({ trip: propTrip }) => {
                 {/* Image Layout */}
                 <div className="grid md:grid-cols-2 gap-4">
                     {/* LEFT BIG IMAGE */}
-                    <div className="rounded-3xl overflow-hidden aspect-[16/9]">
+                    <div className="rounded-3xl overflow-hidden aspect-[15/9]">
                         <img
                             src={trip.images[0]}
                             className="w-full h-full object-cover"
@@ -77,20 +60,19 @@ export const TripPhotos = ({ trip: propTrip }) => {
                     {/* RIGHT GRID */}
                     <div className="grid grid-cols-2 gap-4">
                         {trip.images.slice(1, 5).map((img, i) => (
-                            <div key={i} className="relative rounded-3xl overflow-hidden">
+                            <div key={i} className="relative rounded-3xl overflow-hidden aspect-[15/9]">
                                 <img
                                     src={img}
                                     className="w-full h-full object-cover"
                                     alt="trip"
                                 />
-
                                 {i === 3 && (
                                     <button
                                         onClick={() => {
                                             setActiveImage(0);
                                             setShowGallery(true);
                                         }}
-                                        className="absolute text-xs bottom-2 right-2 bg-black/60 backdrop-blur px-4 py-2 rounded-lg text-white"
+                                        className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl text-white text-sm font-semibold hover:bg-black/80 transition"
                                     >
                                         Show All Photos
                                     </button>

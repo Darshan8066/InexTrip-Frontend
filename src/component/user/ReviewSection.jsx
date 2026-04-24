@@ -4,9 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { createReview, fetchReviewByTripId } from '../../services/reviewServices';
 import { useAuth } from '../../context/AuthContext';
 
-
-// export default function ReviewSection() {
-//     const { id } = useParams();
 export default function ReviewSection({ tripId: propTripId }) {
     const { id } = useParams();
     const tripId = propTripId || id;
@@ -19,14 +16,6 @@ export default function ReviewSection({ tripId: propTripId }) {
     const [submittingReview, setSubmittingReview] = useState(false);
 
     // ✅ Fetch reviews
-    // useEffect(() => {
-    //     const getReviews = async () => {
-    //         const res = await fetchReviewByTripId(tripId);
-    //         setReviews(res.reviews);
-    //     };
-    //     getReviews();
-    // }, [tripId]);
-
     useEffect(() => {
         if (!tripId) return;
 
@@ -183,7 +172,7 @@ export default function ReviewSection({ tripId: propTripId }) {
                                                 </div>
                                                 <div>
                                                     {
-                                                        review.userId.fullname ?
+                                                        review?.userId?.fullname ?
 
                                                             (<h4 className="font-black text-slate-900 tracking-tight">{review?.userId?.fullname}</h4>) :
                                                             (<h4 className="font-black text-slate-900 tracking-tight">{review?.fullname}</h4>)

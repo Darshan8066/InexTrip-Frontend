@@ -1,20 +1,17 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import AdminHeader from '../../component/admin/AdminHeader';
-import AdminSidebar from '../../component/admin/AdminSidebar';
-import ProfileSidebar from '../../component/layouts/ProfileSidebar';
 import { Shield, Activity, MapPin, Calendar, Mail, Phone, ArrowLeft, Trash2, CheckCircle } from 'lucide-react';
 import { deleteUserbyId } from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
 import { fetchauditUser } from '../../services/auditService';
+
 
 const AdminUserProfile = () => {
   const { id } = useParams();
   const { user, logout } = useAuth();
 
   const navigate = useNavigate();
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [auditData, setAuditData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -26,7 +23,7 @@ const AdminUserProfile = () => {
       setAuditData(audit);
     } catch (err) {
       console.error("Failed to load audit data", err);
-      navigate('/admin/users');
+      navigate('/users');
     } finally {
       setLoading(false);
     }
@@ -44,43 +41,28 @@ const AdminUserProfile = () => {
     if (!window.confirm("CRITICAL: Permanently remove this explorer and all associated journey logs?")) return;
     try {
       await deleteUserbyId(id);
-      navigate('/admin/users');
+      navigate('/users');
     } catch (e) {
       alert(e.message);
     }
   };
-  // if (loading) return null;
 
   if (loading || !auditData) {
     return <div className="p-10">Loading...</div>;
   }
 
-  // const { nodeMetadata: target , userTrips=[] } = auditData;
   const { nodeMetadata: target, history = [], reviews = [] } = auditData;
 
-  // const userTrips = trips.filter(t => t.userId === id);
-
-  // console.log("Activity Logs:", userTrips);
   return (
     <div className="h-screen bg-slate-50 flex text-slate-900 transition-all duration-300 overflow-hidden">
-      <AdminSidebar
-        isCollapsed={isCollapsed}
-        onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
-      />
+
 
       <main
-        className={`flex-grow h-full overflow-y-auto overflow-x-hidden transition-all duration-300 scroll-smooth ${isCollapsed ? "ml-20" : "ml-72"
-          }`}
+        className={`flex-grow h-full overflow-y-auto overflow-x-hidden transition-all duration-300 scroll-smooth`}
       >
 
-        <AdminHeader
-          title="Member Audit"
-          subtitle={`User ID: ${id}`}
-          user={user}
-          onProfileClick={() => setIsProfileOpen(true)}
-        />
         <button
-          onClick={() => navigate('/admin/users')}
+          onClick={() => navigate('/users')}
           className="flex my-3 mx-3 gap-2 bg-white text-slate-600 px-5 py-4 border border-slate-200 rounded-2xl font-black text-[10px] hover:bg-slate-50 uppercase tracking-widest shadow-sm transition-all"
         >
           <ArrowLeft size={14} />
@@ -89,11 +71,11 @@ const AdminUserProfile = () => {
 
         <div className="p-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
             {/* Left Column: Profile Card */}
             <div className="lg:col-span-1 space-y-8">
               <div className="bg-white rounded-[40px] border border-slate-200 overflow-hidden shadow-sm p-8 text-center">
                 <div className="relative inline-block mb-6">
-                  {/* <img src={target.profilePhoto} className="w-32 h-32 rounded-[32px] border-4 border-white shadow-2xl object-cover mx-auto" alt="" referrerPolicy="no-referrer" /> */}
                   {target?.profilePhoto ? (
                     <img
                       src={target?.profilePhoto}
@@ -145,27 +127,6 @@ const AdminUserProfile = () => {
                   Purge Explorer
                 </button>
               </div>
-
-              {/* <div className="bg-indigo-600 rounded-[40px] p-8 text-white shadow-xl shadow-indigo-100">
-                <div className="flex items-center gap-3 mb-6">
-                  <Shield size={20} />
-                  <h3 className="font-black text-[10px] uppercase tracking-widest">Security Status</h3>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-bold opacity-70 uppercase tracking-widest">Integrity Check</span>
-                    <span className="text-[10px] font-black bg-white/20 px-2 py-1 rounded-lg uppercase tracking-widest">{integrityCheck}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-bold opacity-70 uppercase tracking-widest">Access Level</span>
-                    <span className="text-[10px] font-black bg-white/20 px-2 py-1 rounded-lg uppercase tracking-widest">{target.role}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-bold opacity-70 uppercase tracking-widest">Encryption</span>
-                    <span className="text-[10px] font-black bg-white/20 px-2 py-1 rounded-lg uppercase tracking-widest">AES-256</span>
-                  </div>
-                </div>
-              </div> */}
             </div>
 
             {/* Right Column: Activity & Stats */}
@@ -194,42 +155,13 @@ const AdminUserProfile = () => {
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Historical Logs</span>
                 </div>
 
-                <div className="p-8 max-h-[350px] no-scrollbar overflow-y-auto pr-2 ">
+                <div className="p-8 max-h-[350px] overflow-y-auto pr-2 ">
                   {history?.length === 0 ? (
                     <div className="py-20 text-center">
                       <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">No activity signals detected</p>
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      {/* {trips.map((log, idx) => {
-                        const trip = trips.find(t => t._id === log.tripId);
-                        return (
-                          <div key={log.id} className="flex items-start gap-6 group">
-                            <div className="relative flex flex-col items-center">
-                              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-indigo-600 font-black text-xs shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                                {idx + 1}
-                              </div>
-                              {idx < trips.length - 1 && <div className="w-0.5 h-12 bg-slate-100 mt-2" />}
-                            </div>
-                            <div className="flex-grow pt-1">
-                              <div className="flex justify-between items-start mb-1">
-                                <h4 className="font-black text-slate-900 text-sm tracking-tight">
-                                  {log.type === 'JOINED' ? 'Enrolled in Journey' : 'Created Itinerary'}
-                                </h4>
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                  {new Date(log.date).toLocaleString()}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs">
-                                <MapPin size={12} />
-                                {trip?.to || 'Unknown Destination'}
-                              </div>
-                            </div>
-                          </div>
-                        );
-
-                      })} */}
-
                       {history.map((trip, idx) => {
                         return (
                           <div key={trip._id} className="flex items-start gap-6 group">
@@ -242,9 +174,6 @@ const AdminUserProfile = () => {
 
                             <div className="flex-grow pt-1">
                               <div className="flex justify-between items-start mb-1">
-                                {/* <h4 className="font-black text-slate-900 text-sm tracking-tight">
-                                  Created Journey
-                                </h4> */}
                                 <h4 className="font-black text-slate-900 text-sm tracking-tight">
                                   {trip.type === 'JOINED' ? 'Enrolled in Journey' : 'Created Itinerary'}
                                 </h4>
@@ -270,14 +199,6 @@ const AdminUserProfile = () => {
         </div>
       </main>
 
-      {isProfileOpen && (
-        <ProfileSidebar
-          user={user}
-          isOpen={isProfileOpen}
-          onClose={() => setIsProfileOpen(false)}
-          logout={logout}
-        />
-      )}
     </div>
   );
 };

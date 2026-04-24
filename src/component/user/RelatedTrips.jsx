@@ -1,63 +1,55 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import useTrips from '../../hooks/useTrips';
 import { useParams } from 'react-router-dom';
 import { fetchTripById } from '../../services/tripServices';
-// import { fetchTripById } from '../../services/tripServices';
-
-// export default function RelatedTrips() {
-// export default function RelatedTrips({ trip }) {
-//     const { trips } = useTrips();
-//     // const { id } = useParams();
-
-//     // const [trip, setTrip] = useState(null);
-//     const [relatedTrips, setRelatedTrips] = useState([]);
-
-//     // ✅ Fetch current trip
-//     // useEffect(() => {
-//     //     const getTrip = async () => {
-//     //         const res = await fetchTripById(id);
-//     //         setTrip(res.trip);
-//     //     };
-//     //     getTrip();
-//     // }, [id]);
-
-//     // ✅ Filter related trips
-//     useEffect(() => {
-//         if (trip && trips.length > 0) {
-//             const data = trips.filter(
-//                 (f) => f.category === trip.category && f._id !== trip._id
-//             );
-//             setRelatedTrips(data);
-//         }
-//     }, [trip, trips]);
-
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 
 export default function RelatedTrips({ trip: propTrip }) {
     const { id } = useParams();
     const { trips } = useTrips();
-
-    const [trip, setTrip] = useState(propTrip || null);
+    const trip = propTrip;
     const [relatedTrips, setRelatedTrips] = useState([]);
 
     useEffect(() => {
         if (!propTrip && id) {
             const loadTrip = async () => {
-                const res = await fetchTripById(id);
-                setTrip(res.trip);
+                await fetchTripById(id);
+
             };
             loadTrip();
         }
     }, [id, propTrip]);
 
     useEffect(() => {
-        if (trip && trips.length > 0) {
+        if (trip && trips?.length > 0) {
             const data = trips.filter(
                 (f) => f.category === trip.category && f._id !== trip._id
             );
             setRelatedTrips(data);
         }
     }, [trip, trips]);
+
+
+    const [sliderRef, instanceRef] = useKeenSlider({
+        mode: "free-snap",
+        slides: {
+            perView: 3,
+            spacing: 20,
+        },
+        breakpoints: {
+            "(max-width: 768px)": {
+                slides: { perView: 1.2, spacing: 10 },
+            },
+            "(max-width: 1024px)": {
+                slides: { perView: 2, spacing: 15 },
+            },
+        },
+        created(slider) {
+            slider.container.scrollLeft = 0;
+        }
+    });
 
     if (!trip || relatedTrips.length === 0) return null;
 
@@ -74,34 +66,28 @@ export default function RelatedTrips({ trip: propTrip }) {
                             </h2>
                             <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest px-6">Handpicked journeys similar to this one</p>
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex pr-4 gap-4">
                             <button
-                                onClick={() => {
-                                    const el = document.getElementById('related-scroll');
-                                    if (el) el.scrollBy({ left: -400, behavior: 'smooth' });
-                                }}
+                                onClick={() => instanceRef.current?.prev()}
                                 className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600 transition-all shadow-sm"
                             >
                                 &larr;
                             </button>
                             <button
-                                onClick={() => {
-                                    const el = document.getElementById('related-scroll');
-                                    if (el) el.scrollBy({ left: 400, behavior: 'smooth' });
-                                }}
-                                className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600 transition-all shadow-sm"
+                                onClick={() => instanceRef.current?.next()}
+                                className="w-12 h-12  rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600 transition-all shadow-sm"
                             >
                                 &rarr;
                             </button>
                         </div>
                     </div>
-                    <div id="related-scroll" className="flex overflow-x-auto pb-8 gap-8  snap-x scroll-smooth">
-                        {relatedTrips.map((Trip) => (
+                    <div key={id} ref={sliderRef} className="keen-slider pb-8">
+
+                        {[...relatedTrips, ...relatedTrips].map((Trip, index) => (
                             <Link
-                                key={Trip._id}
-                                // to={`/trip/${Trip._id}`}
-                                onClick={() => setSelectedTrip(Trip)}
-                                className="min-w-[320px] md:min-w-[400px] bg-white rounded-[48px] overflow-hidden border border-slate-100 shadow-xl hover:shadow-2xl transition-all snap-start group"
+                                to={`/trip/${Trip._id}`}
+                                key={Trip._id + "-" + index}
+                                className="keen-slider__slide -mr-[1px] bg-white rounded-[48px] overflow-hidden border border-slate-100 shadow-xl hover:shadow-2xl transition-all group"
                             >
                                 <div className="h-56 overflow-hidden relative">
                                     <img src={Trip.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={Trip.to} />
@@ -117,7 +103,7 @@ export default function RelatedTrips({ trip: propTrip }) {
                                 <div className="p-8 flex justify-between items-center">
                                     <div className="space-y-1">
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Starting From</p>
-                                        <p className="text-2xl font-black text-indigo-600">₹{Trip.price.toLocaleString()}</p>
+                                        <p className="text-2xl font-black text-indigo-600">₹{Trip?.price.toLocaleString()}</p>
                                     </div>
                                     <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                         &rarr;

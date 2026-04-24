@@ -54,24 +54,11 @@ axiosInstance.interceptors.response.use(
         } else if (error.response?.data?.message) {
             message = error.response.data.message;
         }
-
         // ✅ attach clean message
         error.customMessage = message;
 
         return Promise.reject(error);
     }
 );
-// axiosInstance.interceptors.response.use(
-//     (response) => response,
-//     (error) => {
-//         if (error?.response?.status === 401) {
-//             // remove data 
-//             sessionStorage.removeItem("token");
-//             window.location.href = "/login";
-//         }
-//         return Promise.reject(error);
-//     }
-// )
-
 
 export default axiosInstance;

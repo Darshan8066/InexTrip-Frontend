@@ -1,15 +1,14 @@
 
-import{ useEffect, useRef, useState } from "react";
-
-import toast from 'react-hot-toast'
-import { Navbar } from "../layouts/Navbar";
-import Footer from "../layouts/Footer";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { object, string } from "yup";
-import { fetchUserById, updateProfile } from "../../services/authService";
+import { fetchUserById, updateUser } from "../../services/authService";
 import { getToken } from "../../utils/auth";
 import { useAuth } from "../../context/AuthContext";
+
+import toast from 'react-hot-toast'
+import Footer from "../layouts/Footer";
 import axios from "../../services/axios";
 
 
@@ -18,7 +17,7 @@ const EditProfile = () => {
     const navigate = useNavigate();                           // React Router navigation hook
     const fileInputRef = useRef(null);                        // Used to trigger hidden file input when clicking "Change Photo"
     const token = getToken();                                 // Get logged in user from localStorage
-    const { setUser, logout } = useAuth();
+    const { setUser, user } = useAuth();
     const [selectedFile, setSelectedFile] = useState(null);
 
     if (!token) {
@@ -74,12 +73,21 @@ const EditProfile = () => {
                     profilePhoto: imageUrl,
                 };
 
-                const res = await updateProfile(updatedData);
+                const res = await updateUser(updatedData);
 
                 // update context
                 setUser(res.user);
                 toast.success("Profile updated successfully!");
-                navigate("/dashboard");
+
+                const role = res.user?.role || user?.role;
+
+                if (role === "ADMIN") {
+                    navigate("/overview");
+                } else {
+                    navigate("/dashboard");
+                }
+
+                // navigate(redirectPath);
 
             } catch (error) {
                 console.log(error);
@@ -130,13 +138,9 @@ const EditProfile = () => {
     if (loading) return <div className="text-center py-20">Loading...</div>;         // If data still loading show loader
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col">
+        <div className="min-h-screen overflow-y-hidden bg-slate-50 flex flex-col">
 
-
-            {/* Navbar */}
-            <Navbar logout={logout} />
-
-            <main className="max-w-3xl mx-auto px-4 py-12 w-full flex-grow">
+            <main className="max-w-3xl  mx-auto px-4 py-12 w-full flex-grow">
 
                 <div className="bg-white rounded-[48px] shadow-2xl border overflow-hidden">
 
@@ -271,7 +275,10 @@ const EditProfile = () => {
 
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/dashboard")}
+                                    onClick={() => {
+                                        const role = user?.role;
+                                        navigate(role === "ADMIN" ? "/overview" : "/dashboard");
+                                    }}
                                     className="px-8 text-black bg-gray-100 rounded-xl"
                                 >
                                     Discard
@@ -285,7 +292,7 @@ const EditProfile = () => {
                 </div>
             </main>
 
-            <Footer />
+            {user?.role !== "ADMIN" && <Footer />}
         </div>
     );
 };

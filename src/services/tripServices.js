@@ -1,28 +1,39 @@
 import axios from "./axios";
 
-// export const fetchTrip = async () => {
-//   try {
-//     const res = await axios.get("/trip/get");
-//     return res.data;
-//   } catch (error) {
-//     const message = error.response?.data?.message || "Something went wrong";
-//     console.error("fetchTrip error:", message); // FIX: console.error not console.log
-//      throw new Error(error.customMessage); // 🔥 clean
-//   }
-// };
-// Pass page + limit so the backend returns the correct slice
-export const fetchTrip = async ({ page = 1, limit = 100 } = {}) => {
+export const createTrip = async (tripData) => {
   try {
-    const res = await axios.get(`/trip/get?page=${page}&limit=${limit}`);
+    const res = await axios.post("/trip/create", tripData);
     return res.data;
-    // Returns: { success, trips, totalTrips, totalPages, currentPage, limit }
+  } catch (error) {
+    const message = error.response?.data?.message || "Something went wrong";
+    console.error("createTrip error:", message);
+    throw new Error(error.customMessage); // 🔥 clean
+  }
+};
+
+export const fetchTrip = async () => {
+  try {
+    const res = await axios.get("/trip/get");
+    console.log("fetchTrip:", res)
+    return res.data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Something went wrong";
+    console.error("fetchTrip error:", message); // FIX: console.error not console.log
+    throw new Error(error.customMessage); // 🔥 clean
+  }
+};
+
+// Pass page + limit so the backend returns the correct slice
+export const fetchTripWithPagination = async ({ page = 1, limit = 6 } = {}) => {
+  try {
+    const res = await axios.get(`/trip/getWithPage?page=${page}&limit=${limit}`);
+    return res.data;
   } catch (error) {
     const message = error.response?.data?.message || "Something went wrong";
     console.error("fetchTrip error:", message);
     throw new Error(error.customMessage); // 🔥 clean
   }
 };
-
 
 export const fetchTripById = async (id) => {
   try {
@@ -35,23 +46,13 @@ export const fetchTripById = async (id) => {
   }
 };
 
-export const createTrip = async (tripData) => {
-  try {
-    const res = await axios.post("/trip/create", tripData);
-    return res.data;
-  } catch (error) {
-    const message = error.response?.data?.message || "Something went wrong";
-    console.error("createTrip error:", message);
-    throw new Error(error.customMessage); // 🔥 clean
-  }
-};
 
 export const updateTrip = async (id, tripData) => {
   // FIX: was missing entirely — needed for edit functionality
   try {
     console.log("userid :", id);
     console.log("user trip data :", tripData);
-    
+
     const res = await axios.put(`/trip/update/${id}`, tripData);
     return res.data;
   } catch (error) {
@@ -61,9 +62,11 @@ export const updateTrip = async (id, tripData) => {
   }
 };
 
-export const deleteTrip = async (id) => {
+export const deleteTrip = async (id, tripType) => {
   try {
-    const res = await axios.delete(`/trip/delete/${id}`);
+    const res = await axios.delete(`/trip/delete/${id}`, {
+      data: { tripType }
+    });
     return res.data;
   } catch (error) {
     const message = error.response?.data?.message || "Failed to delete trip";
@@ -72,68 +75,47 @@ export const deleteTrip = async (id) => {
   }
 };
 
-// // import axios from "axios";
 
-// import axios from "./axios";
+export const deployPackage = async (tripData, user) => {
+  try {
+    if (tripData.tripType !== "AI") {
+      if (!user || user.role !== "ADMIN") {
+        throw new Error("Only admin can deploy this package");
+      }
+    }
 
-// export const fetchTrip = async () => {
+    const res = await axios.post("/trip/create", tripData);
+
+    return res.data;
+
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to deploy package";
+
+    console.log("deployPackage:", message);
+    throw new Error(message);
+  }
+};
+
+// export const aiTrip = async (values) => {
 //     try {
-//         const res = await axios.get('/trip/get');
-//         console.log("fetchTrip :",res)
+//         const res = await axios.post("/trip/generate", values);
 //         return res.data;
-
 //     } catch (error) {
-//         // get backend message
-//         const message =
-//             error.response?.data?.message || "Something went wrong";
-
-//         console.log("Trip not found:", message);
-
-//          throw new Error(error.customMessage); // 🔥 clean // send real message to frontend
+//        console.log("aiTrip : ", error);
 //     }
 // };
 
-// export const fetchTripById = async (id) => {
-//     try {
-//         const res = await axios.get(`/trip/get/${id}`);
-//         return res.data;
+export const aiTrip = async (values) => {
+  try {
+    const res = await axios.post("/trip/generate", values);
+    return res.data;
+  } catch (error) {
+    console.log("aiTrip error:", error);
 
-//     } catch (error) {
-
-//         // get backend message
-//         const message =
-//             error.response?.data?.message || "Something went wrong";
-
-//         console.log("Trip not found:", message);
-
-//          throw new Error(error.customMessage); // 🔥 clean // send real message to frontend
-//     }
-
-// };
-
-// export const createTrip = async (tripData) => {
-//     try {
-//         const res = await axios.post(`/trip/create`, tripData);
-//         return res.data;
-
-//     } catch (error) {
-
-//         const message =
-//             error.response?.data?.message || "Something went wrong";
-
-//         console.log("Create Trip Error:", message);
-
-//          throw new Error(error.customMessage); // 🔥 clean
-//     }
-// };
-
-// export const deleteTrip = async (id) => {
-//     try {
-//         const res = await axios.delete(`/trip/delete/${id}`);
-//         return res.data;
-//     } catch (error) {
-//         const message =
-//             error.response?.data?.message || "Failed to delete trip";
-//          throw new Error(error.customMessage); // 🔥 clean
-//     }
-// };
+    return {
+      success: false,
+      message: error?.response?.data?.message || "Server error"
+    };
+  }
+};

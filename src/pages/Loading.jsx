@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const Loading = () => {
@@ -100,12 +100,6 @@ const Loading = () => {
           <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.5em]">Initializing Global Registry</span>
         </div>
       </div>
-
-      {/* <div className="absolute top-10 right-10 hidden md:block">
-        <div className="flex flex-col items-end gap-2">
-          <div className="w-24 h-[1px] bg-white/30" />
-        </div>
-      </div> */}
     </motion.div>
   );
 };
