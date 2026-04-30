@@ -14,6 +14,7 @@ import AdminMessages from "../pages/admin/AdminMessages";
 import { AdminLayout } from "../component/layouts/AdminLayout";
 import { Settings } from "../pages/user/Settings";
 import EditProfile from "../component/user/EditProfile";
+import AdminCancellations from "../pages/admin/AdminCancellation";
 
 export default function AdminRoutes() {
     return (
@@ -26,6 +27,7 @@ export default function AdminRoutes() {
                 <Route path="/admin/settings" element={<Settings />} />
                 <Route path="/users/profile/:id" element={<AdminUserProfile />} />
                 <Route path="/payments" element={<AdminPayments />} />
+                <Route path="/refund" element={<AdminCancellations />} />
             </Route>
 
             <Route path="/users" element={<AdminUsers />} />

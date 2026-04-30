@@ -140,12 +140,22 @@ export const Settings = () => {
                             <div className="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100 lg:sticky lg:top-24">
                                 <div className="flex flex-col items-center text-center mb-8">
                                     <div className="w-24 h-24 rounded-[28px] overflow-hidden border-4 border-slate-50 shadow-inner mb-4">
-                                        <img
+                                        {/* <img
                                             src={user?.profilePhoto || 'https://picsum.photos/seed/user/200'}
                                             className="w-full h-full object-cover"
                                             alt="Profile"
                                             referrerPolicy="no-referrer"
-                                        />
+                                        /> */}
+                                        {user?.profilePhoto ? (
+                                            <img
+                                                src={user?.profilePhoto}
+                                                className=" w-33 h-32 border-3 border-black rounded-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full text-6xl rounded-full border-3 border-black bg-indigo-600 text-white flex items-center justify-center font-bold">
+                                                {user?.fullname?.charAt().toUpperCase()}
+                                            </div>
+                                        )}
                                     </div>
                                     <h2 className="text-xl font-black text-slate-900 leading-tight">{user?.fullname}</h2>
                                     <span className="mt-2 px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-indigo-100">

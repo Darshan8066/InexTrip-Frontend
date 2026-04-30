@@ -43,12 +43,13 @@ export const getUserMessages = async (options = {}) => {
 
         // build query params safely
         const params = new URLSearchParams();
+        console.log("params : ", params)
 
         if (status) params.append("status", status);
         if (search) params.append("search", search);
         if (page) params.append("page", page);
         if (limit) params.append("limit", limit);
-
+        console.log("status : ", status);
         const response = await axios.get("/messages/user");
 
         // success response
@@ -95,7 +96,7 @@ export const getUserMessages = async (options = {}) => {
  * @param {string} id
  * @param {"PENDING" | "RESOLVED"} status
  */
-export const updateMessageStatus = async (id, status) => {
+export const updateMessageStatus = async (id, status, resolution = null) => {
     try {
         if (!id) {
             throw new Error("Message ID is required");
@@ -106,7 +107,7 @@ export const updateMessageStatus = async (id, status) => {
         }
 
         const response = await axios.put(`/messages/update/${id}`, {
-            status,
+            status, resolution
         });
 
         // backend structure: { success, message, data }

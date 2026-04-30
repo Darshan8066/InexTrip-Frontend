@@ -5,6 +5,7 @@ import ProfileSidebar from './ProfileSidebar';
 import { MobileSidebar } from './MobileSidebar';
 import { Menu } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import NotificationBell from '../common/NotificationBell';
 
 export const Navbar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -94,6 +95,10 @@ export const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4 h-full">
+            {user && (
+              <NotificationBell theme="dark" />
+            )}
+            
             {user ? (
               <div className="relative ">
                 <button

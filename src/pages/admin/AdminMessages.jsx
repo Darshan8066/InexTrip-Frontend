@@ -33,8 +33,8 @@ const AdminMessages = () => {
             setLoading(false);
         }
     }, []);
-
-    const filteredMessages = messages.filter(msg => {
+    console.log("messages : ", messages)
+    const filteredMessages = messages?.filter(msg => {
         if (messageFilter === 'ALL') return true;
         if (messageFilter === 'READED') return msg.status === 'RESOLVED';
         if (messageFilter === 'UNREAD') return msg.status !== 'RESOLVED';
@@ -45,9 +45,9 @@ const AdminMessages = () => {
         loadMessages();
     }, [loadMessages]);
 
-    const handleStatusUpdate = async (id, status = null) => {
+    const handleStatusUpdate = async (id, status, resolution = null) => {
         try {
-            const res = updateMessageStatus(id, status,);
+            const res = updateMessageStatus(id, status, resolution);
             setMessages(res)
             loadMessages();
             setShowResolveModal(false);

@@ -30,7 +30,7 @@ export const MobileSidebar = ({ isOpen, onClose }) => {
         { label: 'Services', path: '/services', icon: Briefcase },
         { label: 'About', path: '/about', icon: Info },
         { label: 'Contact', path: '/contact', icon: Mail },
-         { label: 'Privacy', path: '/privacy-policy', icon: Shield },
+        { label: 'Privacy', path: '/privacy-policy', icon: Shield },
     ];
 
     const handleNavigate = (path) => {
@@ -98,12 +98,17 @@ export const MobileSidebar = ({ isOpen, onClose }) => {
                             {user ? (
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3 px-2">
-                                        <img
-                                            src={user.profilePhoto}
-                                            alt="Profile"
-                                            className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover"
-                                            referrerPolicy="no-referrer"
-                                        />
+                                       
+                                        {user?.profilePhoto ? (
+                                            <img
+                                                src={user?.profilePhoto}
+                                                className=" w-33 h-32 border-5 border-black rounded-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-10 h-10 text-xl rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
+                                                {user?.fullname?.charAt().toUpperCase()}
+                                            </div>
+                                        )}
                                         <div className="flex-grow min-w-0">
                                             <p className="text-sm font-black text-slate-900 truncate capitalize">{user.fullName}</p>
                                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">{user.role}</p>

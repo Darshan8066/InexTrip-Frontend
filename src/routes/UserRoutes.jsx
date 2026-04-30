@@ -12,6 +12,7 @@ import { Settings } from "../pages/user/Settings";
 import CreateTrip from "../pages/user/CreateTrip";
 import { Navbar } from "../component/layouts/Navbar";
 import TripDetails from "../pages/user/TripDetails";
+import CancellationManager from "../component/layouts/CancelTrip";
 
 
 export default function UserRoutes() {
@@ -23,13 +24,13 @@ export default function UserRoutes() {
                 <Route path="/join-trip" element={<JoinTrip />} />
                 <Route
                     path="/trip/:id"
-                    element={<TripDetails key={window.location.pathname} />}
-                />
+                    element={<TripDetails key={window.location.pathname} />} />
                 <Route path="/create-trip" element={<CreateTrip />} />
                 <Route path="/edit-profile" element={<EditProfile />} />
                 <Route path="/favourites" element={<Favourites />} />
                 <Route path="/user-reviews" element={<Reviews />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/cancellations" element={<CancellationManager />} />
             </Route>
         </Route>
     );

@@ -11,6 +11,9 @@ import UserRoutes from './routes/UserRoutes';
 import AdminRoutes from './routes/AdminRoutes';
 import { Payment } from "./pages/user/Payment"
 import Loading from './pages/Loading';
+import ChatBot from './component/common/ChatBot';
+import { SocketProvider } from './context/SocketContext';
+import NotificationToast from './component/common/NotificationToast';
 
 
 
@@ -38,17 +41,21 @@ function App() {
       ) : (
 
         <AuthProvider>
+          {/* SocketProvider must be inside AuthProvider so it can read user/token */}
+          <SocketProvider>
+            {/* Global real-time notification toast — visible on every page */}
+            <NotificationToast />
+            <Routes>
 
-          <Routes>
+              {PublicRoutes()}
+              {UserRoutes()}
+              {AdminRoutes()}
 
-            {PublicRoutes()}
-            {UserRoutes()}
-            {AdminRoutes()}
-
-            {/* Common */}
-            <Route path="/payment/:id" element={<Payment />} />
-          </Routes >
-
+              {/* Common */}
+              <Route path="/payment/:id" element={<Payment />} />
+            </Routes >
+            <ChatBot />
+          </SocketProvider>
         </AuthProvider >
       )
       }

@@ -62,6 +62,11 @@ export const AdminLayout = () => {
                     title: "Messages",
                     subtitle: "User Queries"
                 };
+            case "/refund":
+                return {
+                    title: "Cancellation",
+                    subtitle: `Total Cancellation`
+                };
 
             default:
                 return {
@@ -87,13 +92,6 @@ export const AdminLayout = () => {
                 className={`flex-grow overflow-y-auto transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"
                     }`}
             >
-                {/* ✅ Header (fixed) */}
-                {/* <AdminHeader
-                    title="Admin Panel"
-                    subtitle="Dashboard"
-                    user={user}
-                    onProfileClick={() => setIsProfileOpen(true)}
-                /> */}
 
                 <AdminHeader
                     title={title}

@@ -134,7 +134,7 @@ const UserReviews = () => {
                                         transition={{ delay: idx * 0.1 }}
                                         className="bg-white p-10 rounded-[48px] shadow-xl shadow-slate-200/30 border border-slate-50 flex flex-col group hover:shadow-2xl transition-all"
                                     >
-                                        <p className="text-xl font-black text-slate-900 mb-2">{review.tripId.to}</p>
+                                        <p className="text-xl font-black text-slate-900 mb-2">{review?.tripId?.to}</p>
                                         <div className="flex justify-between items-start mb-8">
                                             <div className="flex text-amber-400 text-sm">
                                                 {[...Array(5)].map((_, i) => (

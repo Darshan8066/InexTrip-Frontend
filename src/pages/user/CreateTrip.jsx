@@ -121,13 +121,17 @@ const CreateTrip = () => {
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col" >
 
-      <main className="max-w-4xl mx-auto px-4 py-12 w-full flex-grow">
+      {/* <main className="max-w-4xl mx-auto px-4 py-12 w-full flex-grow"> */}
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-7xl font-black text-slate-900 mb-6 tracking-tighter leading-none">
+          {/* <h1 className="text-7xl font-black text-slate-900 mb-6 tracking-tighter leading-none">
+            CRAFT YOUR <span className="text-indigo-600">ESCAPE</span>
+          </h1> */}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 mb-4 sm:mb-6 leading-tight">
             CRAFT YOUR <span className="text-indigo-600">ESCAPE</span>
           </h1>
           <p className="text-sm text-slate-400 font-black uppercase tracking-[0.4em]">Where logic meets wanderlust</p>
@@ -137,7 +141,8 @@ const CreateTrip = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-[64px] p-16 shadow-[0_64px_128px_-32px_rgba(0,0,0,0.12)] border border-slate-100 relative overflow-hidden"
+          // className="bg-white rounded-[64px] p-16 shadow-[0_64px_128px_-32px_rgba(0,0,0,0.12)] border border-slate-100 relative overflow-hidden"
+          className="bg-white rounded-2xl sm:rounded-3xl md:rounded-[48px] p-4 sm:p-8 md:p-12 shadow-lg border border-slate-100"
         >
           {/* Decorative element */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
@@ -166,7 +171,8 @@ const CreateTrip = () => {
           )}
 
           <form onSubmit={formik.handleSubmit} className="space-y-12 relative z-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12"> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div className="group">
                 <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-2 group-focus-within:text-indigo-600 transition-colors">
                   <MapPin size={12} /> Origin City
@@ -179,7 +185,8 @@ const CreateTrip = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.from}
                   placeholder="Starting point..."
-                  className={`w-full px-8 py-6 bg-slate-50 border-2 ${formik.touched.from && formik.errors.from ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 shadow-sm`}
+                  className={`w-full  bg-slate-50 border-2 ${formik.touched.from && formik.errors.from ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 shadow-sm`}
+                // className={`w-full px-8 py-6 bg-slate-50 border-2 ${formik.touched.from && formik.errors.from ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 shadow-sm`}
                 />
               </div>
               <div className="group">
@@ -194,12 +201,14 @@ const CreateTrip = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.to}
                   placeholder="Where to?"
-                  className={`w-full px-8 py-6 bg-slate-50 border-2 ${formik.touched.to && formik.errors.to ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 shadow-sm`}
+                  className={`w-full px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-slate-50 border-2 ${formik.touched.to && formik.errors.to ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white  outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 shadow-sm`}
+                // className={`w-full px-8 py-6 bg-slate-50 border-2 ${formik.touched.to && formik.errors.to ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 shadow-sm`}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12"> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div className="group">
                 <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-2 group-focus-within:text-indigo-600 transition-colors">
                   <Calendar size={12} /> Start Journey
@@ -212,7 +221,8 @@ const CreateTrip = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.startDate}
-                  className={`w-full px-8 py-6 bg-white border-2 ${formik.touched.startDate && formik.errors.startDate ? 'border-rose-400' : 'border-slate-200'} focus:border-indigo-600 rounded-[32px] outline-none transition-all font-black text-slate-800 shadow-sm`}
+                  className={`w-full  bg-white border-2 ${formik.touched.startDate && formik.errors.startDate ? 'border-rose-400' : 'border-slate-200'} focus:border-indigo-600 px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl outline-none transition-all font-black text-slate-800 shadow-sm`}
+                // className={`w-full px-8 py-6 bg-white border-2 ${formik.touched.startDate && formik.errors.startDate ? 'border-rose-400' : 'border-slate-200'} focus:border-indigo-600 rounded-[32px] outline-none transition-all font-black text-slate-800 shadow-sm`}
                 />
               </div>
               <div className="group">
@@ -227,12 +237,14 @@ const CreateTrip = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.endDate}
-                  className={`w-full px-8 py-6 bg-white border-2 ${formik.touched.endDate && formik.errors.endDate ? 'border-rose-400' : 'border-slate-200'} focus:border-indigo-600 rounded-[32px] outline-none transition-all font-black text-slate-800 shadow-sm`}
+                  className={`w-full bg-white border-2 ${formik.touched.endDate && formik.errors.endDate ? 'border-rose-400' : 'border-slate-200'} focus:border-indigo-600 px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl outline-none transition-all font-black text-slate-800 shadow-sm`}
+                // className={`w-full px-8 py-6 bg-white border-2 ${formik.touched.endDate && formik.errors.endDate ? 'border-rose-400' : 'border-slate-200'} focus:border-indigo-600 rounded-[32px] outline-none transition-all font-black text-slate-800 shadow-sm`}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12"> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div className="group">
                 <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-2 group-focus-within:text-indigo-600 transition-colors">
                   <Wallet size={12} /> Budget Level
@@ -243,7 +255,8 @@ const CreateTrip = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.budget}
-                  className="w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 shadow-sm appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white outline-none transition-all font-black text-slate-700 shadow-sm appearance-none cursor-pointer"
+                // className="w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 shadow-sm appearance-none cursor-pointer"
                 >
                   <option value="Budget">Economy (Budget)</option>
                   <option value="Mid-range">Standard (Mid-range)</option>
@@ -262,12 +275,14 @@ const CreateTrip = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.travelers}
-                  className={`w-full px-8 py-6 bg-slate-50 border-2 ${formik.touched.travelers && formik.errors.travelers ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 shadow-sm`}
+                  className={`w-full bg-slate-50 border-2 ${formik.touched.travelers && formik.errors.travelers ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl outline-none transition-all font-black text-slate-700 shadow-sm`}
+                // className={`w-full px-8 py-6 bg-slate-50 border-2 ${formik.touched.travelers && formik.errors.travelers ? 'border-rose-400' : 'border-slate-100'} focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 shadow-sm`}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12"> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div className="group">
                 <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-2 group-focus-within:text-indigo-600 transition-colors">
                   <Car size={12} /> Transport
@@ -278,7 +293,8 @@ const CreateTrip = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.transportMode}
-                  className="w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 shadow-sm appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white outline-none transition-all font-black text-slate-700 shadow-sm appearance-none cursor-pointer"
+                // className="w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 shadow-sm appearance-none cursor-pointer"
                 >
                   <option value="Bus"> Bus</option>
                   <option value="Train">Train</option>
@@ -299,7 +315,8 @@ const CreateTrip = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.description}
                 placeholder="e.g. I want a luxury trip with focus on local food and hiking..."
-                className="w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 min-h-[160px] shadow-sm"
+                className="w-full px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 min-h-[160px] shadow-sm"
+              // className="w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 focus:border-indigo-600 focus:bg-white rounded-[32px] outline-none transition-all font-black text-slate-700 placeholder:text-slate-300 min-h-[160px] shadow-sm"
               />
             </div>
 
@@ -308,7 +325,8 @@ const CreateTrip = () => {
               whileTap={{ scale: 0.98 }}
               disabled={formik.isSubmitting}
               type="submit"
-              className="w-full bg-slate-900 text-white py-8 rounded-[40px] font-black text-2xl shadow-[0_32px_64px_-16px_rgba(79,70,229,0.4)] hover:bg-indigo-600 transition-all flex items-center justify-center gap-6 uppercase tracking-[0.4em] disabled:opacity-50 mt-8"
+              className="w-full bg-slate-900 text-white py-4 sm:py-6 rounded-xl sm:rounded-2xl font-bold text-lg sm:text-xl"
+            // className="w-full bg-slate-900 text-white py-8 rounded-[40px] font-black text-2xl shadow-[0_32px_64px_-16px_rgba(79,70,229,0.4)] hover:bg-indigo-600 transition-all flex items-center justify-center gap-6 uppercase tracking-[0.4em] disabled:opacity-50 mt-8"
             >
               {formik.isSubmitting ? (
                 <>
@@ -322,7 +340,8 @@ const CreateTrip = () => {
           </form>
           {formik.isSubmitting && (
             <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center">
-              <div className="bg-white px-10 py-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4">
+              {/* <div className="bg-white px-10 py-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4"> */}
+              <div className="bg-white px-6 sm:px-10 py-6 sm:py-8 rounded-2xl shadow-xl">
 
                 <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
 

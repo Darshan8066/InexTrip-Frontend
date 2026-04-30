@@ -1,3 +1,4 @@
+import NotificationBell from "../common/NotificationBell";
 
 export default function AdminHeader({
     title,
@@ -27,6 +28,10 @@ export default function AdminHeader({
 
                 {/* Extra buttons (optional) */}
                 {rightContent}
+
+                {/* Notification Bell — light theme for white header */}
+                <NotificationBell theme="light" />
+
 
                 {/* Profile */}
                 <button

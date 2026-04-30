@@ -10,6 +10,7 @@ const sidebarLinks = [
     { path: '/payments', label: 'Payments', icon: <FaMoneyBill className="text-emerald-500 text-lg" /> },
     { path: '/reviews', label: 'Reviews', icon: <FaStar className="text-orange-500 text-lg" /> },
     { path: '/messages', label: 'Messages', icon: <FaEnvelope className="text-yellow-400 text-lg" /> },
+    { path: '/refund', label: 'refund', icon: <FaEnvelope className="text-yellow-400 text-lg" /> },
 ];
 export default function AdminSidebar({ isCollapsed, onToggleSidebar }) {
     const navigate = useNavigate();

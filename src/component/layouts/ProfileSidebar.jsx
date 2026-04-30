@@ -2,9 +2,9 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useAuth } from '../../context/AuthContext';
-import { useState } from 'react';
 
-const ProfileSidebar = ({ isOpen, onClose, notifications = [], }) => {
+
+const ProfileSidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const isAdmin = user?.role?.toUpperCase() === "ADMIN";
@@ -12,29 +12,6 @@ const ProfileSidebar = ({ isOpen, onClose, notifications = [], }) => {
   // const [isModalOpen, setIsModalOpen] = useState(false);
   if (!isOpen) return null;
 
-
-  // const handleMarkAsRead = (id) => {
-  //   const seenKey = `seen_notifs_${user.id}`;
-  //   const currentSeen = JSON.parse(localStorage.getItem(seenKey) || '[]');
-
-  //   if (id === 'all') {
-  //     const allIds = notifications.map(n => n._id);
-  //     const newSeen = [...new Set([...currentSeen, ...allIds])];
-  //     localStorage.setItem(seenKey, JSON.stringify(newSeen));
-
-  //     setReadNotifications(prev => [...prev, ...notifications]);
-  //     setNotifications([]);
-  //   } else {
-  //     const notifToMark = notifications.find(n => n._id === id);
-  //     if (notifToMark) {
-  //       const newSeen = [...new Set([...currentSeen, id])];
-  //       localStorage.setItem(seenKey, JSON.stringify(newSeen));
-
-  //       setReadNotifications(prev => [notifToMark, ...prev]);
-  //       setNotifications(prev => prev.filter(n => n._id !== id));
-  //     }
-  //   }
-  // };
 
   return (
     <div className="fixed  inset-0 z-[1000] ">
@@ -52,11 +29,11 @@ const ProfileSidebar = ({ isOpen, onClose, notifications = [], }) => {
         {/* User Header */}
         <div className="flex flex-col items-center justify-center py-6 border-b border-[#30363d] bg-gradient-to-b from-indigo-500/10 to-transparent">
 
-          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-indigo-500 shadow-lg shadow-indigo-500/30">
+          <div className="w-16 h-16 rounded-full  overflow-hidden border-2 border-indigo-500 shadow-sm shadow-indigo-500/30">
             {user?.profilePhoto ? (
               <img src={user.profilePhoto} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-indigo-600 text-white text-xl">
+              <div className="w-full h-full flex items-center justify-center bg-indigo-600 text-white text-3xl">
                 {user?.fullname?.charAt(0).toUpperCase()}
               </div>
             )}
@@ -71,24 +48,6 @@ const ProfileSidebar = ({ isOpen, onClose, notifications = [], }) => {
           </p>
 
         </div>
-
-        {/* Notifications Section - CLICKABLE BUTTON */}
-        <button
-          // onClick={() => setIsModalOpen(true)}
-          className="w-full px-4 py-3 flex items-center justify-between hover:bg-[#161b22] border-b border-[#30363d] transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#8b949e] group-hover:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-            <span className="text-sm font-medium">Notifications</span>
-          </div>
-          {notifications.length > 0 && (
-            <span className="bg-indigo-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full">
-              {notifications.length}
-            </span>
-          )}
-        </button>
 
         <div className="border-t border-[#30363d] py-3 space-y-1">
           <p className="px-3 mt-2 text-[10px] text-[#8b949e] uppercase tracking-wider">
@@ -170,14 +129,6 @@ const ProfileSidebar = ({ isOpen, onClose, notifications = [], }) => {
           </button>
         </div>
       </motion.div>
-
-      {/* <NotificationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        notifications={notifications}
-        readNotifications={readNotifications}
-        onMarkAsRead={handleMarkAsRead}
-      /> */}
 
     </div >
   );
