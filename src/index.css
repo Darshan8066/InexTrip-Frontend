@@ -28,22 +28,30 @@ body {
 
 /* Related trips */
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-
-
 .keen-slider {
   display: flex;
   align-items: stretch;
-  background: #f8fafc; /* same as your page bg */
+  background: #f8fafc;
+  /* same as your page bg */
 }
 
 .keen-slider__slide {
   min-width: 0;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+.pdfview ::-webkit-scrollbar {
+  display: none;
+}
+
+.pdfview {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

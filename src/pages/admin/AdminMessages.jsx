@@ -213,7 +213,7 @@ const AdminMessages = () => {
 
                 />
 
-                <div className="max-w-6xl mx-auto mt-12">
+                <div className="max-w-6xl  m-8 mt-12">
                     <div className="flex justify-between items-center mb-12 flex-wrap gap-4">
 
                         {/* LEFT SIDE (optional title) */}

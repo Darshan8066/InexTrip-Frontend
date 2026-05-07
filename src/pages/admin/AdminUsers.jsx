@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { deleteUserbyId, fetchUser } from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
-
 import ProfileSidebar from '../../component/layouts/ProfileSidebar';
-import AdminSidebar from '../../component/admin/AdminSidebar';
-import AdminHeader from '../../component/admin/AdminHeader';
 import Swal from 'sweetalert2';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
@@ -15,7 +12,7 @@ const AdminUsers = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
-    const [isCollapsed, setIsCollapsed] = useState(false);
+
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
@@ -95,20 +92,7 @@ const AdminUsers = () => {
     return (
         <div className="h-screen bg-slate-50 flex text-slate-900 transition-all duration-300 overflow-hidden">
 
-            <AdminSidebar
-                isCollapsed={isCollapsed}
-                onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
-            />
-
-            <main className={`flex-grow h-full  overflow-y-auto overflow-x-hidden transition-all duration-300 ${isCollapsed ? "ml-20" : "ml-72"}`}
-            >
-
-                <AdminHeader
-                    title="Explorer Registry"
-                    subtitle={`Population :${users.length}`}
-                    user={user}
-                    onProfileClick={() => setIsProfileOpen(true)}
-                />
+            <main className={`flex-grow h-full  overflow-y-auto overflow-x-hidden transition-all duration-300`}>
 
                 <div className="p-8">
                     <div className="bg-white rounded-[40px] border border-slate-200 overflow-hidden shadow-sm">

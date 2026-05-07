@@ -8,7 +8,6 @@ const AdminCancellations = () => {
     const { user } = useAuth();
     const [cancellations, setCancellations] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [resolutionText, setResolutionText] = useState('');
     const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -42,7 +41,7 @@ const AdminCancellations = () => {
                 paymentId,
                 refundTxnId: txnId
             }, user);
-            console.log("object ",res);
+            console.log("object ", res);
             // refreshNotifications();
             setSelectedRequest(null);
             setShowPaymentModal(false);
@@ -65,9 +64,9 @@ const AdminCancellations = () => {
     return (
         <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
 
-
+            {/* <main className="flex-grow overflow-y-hiddden "> */}
             <main className="flex-grow overflow-y-auto custom-scrollbar">
-                <div className="p-10">
+                <div className="m-2">
                     {loading ? (
                         <div className="h-64 flex items-center justify-center">
                             <div className="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full" />
@@ -155,7 +154,7 @@ const AdminCancellations = () => {
                                 </div>
                             </div>
 
-                            <div className="flex-grow overflow-y-auto p-12 custom-scrollbar">
+                            <div className="flex-grow overflow-y-auto p-12">
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                                     <div className="space-y-8">
                                         <div className="bg-slate-50 p-8 rounded-[40px] space-y-6">
@@ -198,13 +197,14 @@ const AdminCancellations = () => {
                                         </div>
 
                                         {selectedRequest.status === 'PENDING' && (
-                                            <div className="px-4 space-y-4">
+                                            <div className="space-y-4">
                                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Resolution Response</p>
-                                                <textarea
+                                                <input
+                                                    type='text'
                                                     value={resolutionText}
                                                     onChange={(e) => setResolutionText(e.target.value)}
                                                     placeholder="Internal notes or reason for rejection..."
-                                                    className="w-full bg-white border border-slate-200 p-6 rounded-3xl outline-none focus:border-indigo-500 min-h-[100px] text-sm font-bold"
+                                                    className="bg-whitev text-left text-black border border-slate-200 py-1 px-30 rounded-xl focus:border-indigo-500 min-h-[50px] text-sm font-bold"
                                                 />
                                                 <div className="flex gap-4">
                                                     <button
@@ -229,10 +229,10 @@ const AdminCancellations = () => {
 
                                     <div>
                                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-2">Evidence Capture (Invoice)</p>
-                                        <div className="bg-slate-50 border-4 border-white p-2 rounded-[48px] shadow-2xl overflow-hidden aspect-[3/4] group cursor-zoom-in">
+                                        <div className=" border-1 border-white  rounded-[44px] overflow-hidden custom-scrollbar aspect-[3/4] group cursor-zoom-in">
                                             <iframe
                                                 src={selectedRequest?.invoicePhoto}
-                                                className="w-full h-full object-contain bg-slate-900 rounded-[44px] shadow-inner group-hover:scale-105 transition-transform duration-700"
+                                                className="w-full h-full rounded-[44px] pdfview"
                                                 alt="Invoice Evidence"
                                             />
                                         </div>
@@ -251,53 +251,53 @@ const AdminCancellations = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                            className="bg-white w-full h-f rounded-[48px] overflow-hidden shadow-2xl border-4 border-emerald-50"
+                            className="bg-white h-150 w-100 rounded-[48px] overflow-hidden shadow-2xl border-4 border-emerald-50"
                         >
-                            <div className="p-10 text-center border-b border-slate-50">
-                                <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6">
+                            <div className="pt-2 text-center border-b border-slate-50">
+                                <div className="w-10 h-10 text-center bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6">
                                     🏦
                                 </div>
-                                <h3 className="text-2xl font-black text-slate-900 tracking-tight">UPI Settlement</h3>
-                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-2">Execute digital refund transfer</p>
+                                <h3 className="text-sm text-center font-black text-slate-900 tracking-tight">UPI Settlement</h3>
+                                <p className="text-slate-400 text-center text-[10px] font-black uppercase tracking-widest mt-1">Execute digital refund transfer</p>
                             </div>
 
-                            <div className="p-10 space-y-8">
-                                <div className="bg-slate-50 p-6 rounded-3xl flex flex-col items-center">
+                            <div>
+                                <div className="m-2 bg-slate-100 p-2 rounded-3xl flex flex-col items-center">
                                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4">Scan using any UPI App</p>
                                     <div className="bg-white p-4 rounded-3xl shadow-lg mb-6 border-2 border-slate-100">
-                                        <img src={qrCodeUrl} alt="UPI QR" className="w-48 h-48" />
+                                        <img src={qrCodeUrl} alt="UPI QR" className="w-33 h-33" />
                                     </div>
-                                    <div className="w-full space-y-2 text-center">
-                                        <p className="text-xs font-black text-slate-900">{selectedRequest?.upiId}</p>
-                                        <p className="text-[10px] font-bold text-slate-400">AMOUNT: ₹{selectedRequest?.refundAmount?.toLocaleString()}</p>
+                                    <div className=" text-center">
                                     </div>
+                                    <p className="text-xs text-center font-black text-slate-900">{selectedRequest?.upiId}</p>
+                                    <p className="text-[10px] text-center font-bold text-slate-400">AMOUNT: ₹{selectedRequest?.refundAmount?.toLocaleString()}</p>
                                 </div>
 
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">Reference / Transaction ID</label>
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-4 mb-2 block">Reference / Transaction ID</label>
                                         <input
                                             type="text"
                                             value={adminTxnId}
                                             onChange={(e) => setAdminTxnId(e.target.value)}
                                             placeholder="UTR or Ref Number (Required)"
-                                            className="w-full bg-slate-50 border-2 border-slate-100 p-5 rounded-2xl outline-none focus:border-emerald-500 text-sm font-bold uppercase"
+                                            className="w-90 mx-3 bg-slate-50 border-2 border-slate-100 p-3 rounded-2xl outline-none focus:border-emerald-500 text-sm font-bold uppercase"
                                         />
                                     </div>
 
-                                    <div className="flex gap-4 pt-4">
-                                        <button
-                                            onClick={() => setShowPaymentModal(false)}
-                                            className="px-8 py-5 bg-slate-100 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all"
-                                        >
-                                            Cancel
-                                        </button>
+                                    <div className=" mx-4 flex gap-6 pt-4">
                                         <button
                                             disabled={!adminTxnId || processing}
                                             onClick={() => handleStatusUpdate(selectedRequest?.id, 'APPROVED', selectedRequest?.paymentId, selectedRequest?.userId, adminTxnId)}
-                                            className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl shadow-indigo-50 disabled:opacity-50"
+                                            className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl shadow-indigo-50 disabled:opacity-90"
                                         >
-                                            {processing ? 'Processing...' : 'Confirm Payment & Complete'}
+                                            {processing ? 'Processing...' : 'Confirm Payment'}
+                                        </button>
+                                        <button
+                                            onClick={() => setShowPaymentModal(false)}
+                                            className="px-10 py-5 bg-slate-200 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-300 transition-all"
+                                        >
+                                            Cancel
                                         </button>
                                     </div>
                                 </div>

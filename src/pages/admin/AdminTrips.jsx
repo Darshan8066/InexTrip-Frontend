@@ -164,7 +164,7 @@ export const AdminTrips = () => {
           onToggleSidebar={() => setSidebarVisible(!isSidebarVisible)}
         />
 
-        <div className={`px-6 pb-10 mx-auto ${selectedTrip ? "max-w-[1200px]" : "max-w-[1800px]"
+        <div className={`px-8 pb-10 mx-auto ${selectedTrip ? "max-w-[1200px]" : "max-w-[1800px]"
           }`}>
           {/* Top bar */}
 

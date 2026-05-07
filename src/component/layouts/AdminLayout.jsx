@@ -22,23 +22,23 @@ export const AdminLayout = () => {
                     subtitle: "Total Transactions Overview"
                 };
 
-                case "/overview":
-                    return {
-                        title: "Admin Panel",
-                        subtitle: "Dashboard"
-                    };
+            case "/overview":
+                return {
+                    title: "Admin Panel",
+                    subtitle: "Dashboard"
+                };
 
-                case "/admin/edit-profile" :
-                    return {
-                        title: "Your Profile",
-                        subtitle: ""
-                    };
-                case "/admin/settings" :
-                    return {
-                        title: "settings",
-                        subtitle: ""
-                    };
-                
+            case "/admin/edit-profile":
+                return {
+                    title: "Your Profile",
+                    subtitle: ""
+                };
+            case "/admin/settings":
+                return {
+                    title: "settings",
+                    subtitle: ""
+                };
+
             case "/users":
                 return {
                     title: "Users",
@@ -50,6 +50,12 @@ export const AdminLayout = () => {
                     title: "Trips",
                     subtitle: "Inventory Control"
                 };
+
+            case "/expired":
+                return {
+                    title: "Expired Inventory",
+                    subtitle: "Passed Capacity Units"
+                }
 
             case "/reviews":
                 return {

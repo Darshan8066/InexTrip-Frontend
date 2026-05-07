@@ -7,6 +7,7 @@ const sidebarLinks = [
     { path: '/overview', label: 'Overview', icon: <FaBolt className="text-amber-500 text-lg" /> },
     { path: '/users', label: 'Explorers', icon: <FaUsers className="text-blue-400 text-lg" /> },
     { path: '/trips', label: 'Inventory', icon: <FaMap className="text-green-400 text-lg" /> },
+    { path: '/expired', label: 'Expired', icon: '🕰️' },
     { path: '/payments', label: 'Payments', icon: <FaMoneyBill className="text-emerald-500 text-lg" /> },
     { path: '/reviews', label: 'Reviews', icon: <FaStar className="text-orange-500 text-lg" /> },
     { path: '/messages', label: 'Messages', icon: <FaEnvelope className="text-yellow-400 text-lg" /> },

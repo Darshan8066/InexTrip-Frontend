@@ -140,7 +140,7 @@ const AdminDashboard = () => {  // ✅ accept logout prop
                             </h3>
                             <div className="space-y-4">
                                 <button
-                                    onClick={() => navigate('/admin/trips?create=true')}
+                                    onClick={() => navigate('/trips?create=true')}
                                     className="w-full bg-slate-50 hover:bg-slate-100 p-6 rounded-3xl border border-slate-100 transition-all text-left flex items-center justify-between group"
                                 >
                                     <span className="font-black uppercase tracking-widest text-[11px] text-slate-700">Add New Inventory</span>
