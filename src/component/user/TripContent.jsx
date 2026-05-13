@@ -1,7 +1,8 @@
 import React from 'react';
 import PackageValues from './PackageValues';
 
-export default function TripContent({ trip }) {
+// export default function TripContent({ trip }) {
+export default function TripContent({ trip, hidePaymentBox }) {
     if (!trip) return null;
 
     return (
@@ -12,12 +13,19 @@ export default function TripContent({ trip }) {
                     {trip.description}
                 </p>
             </div>
-
-            {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-12"> */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div
+                className={`grid gap-8 ${hidePaymentBox
+                    ? "grid-cols-1"
+                    : "grid-cols-1 xl:grid-cols-3"
+                    }`}
+            >
 
                 {/* LEFT - ITINERARY */}
-                <div className="lg:col-span-2 space-y-12">
+
+                <div
+                    className={`space-y-12 ${!hidePaymentBox ? "lg:col-span-2" : "col-span-1"
+                        }`}
+                >
                     <section>
                         <h2 className="text-3xl font-black text-slate-900 mb-12 flex items-center gap-4">
                             <span className="w-2 h-10 bg-indigo-600 rounded-full" />
@@ -56,8 +64,9 @@ export default function TripContent({ trip }) {
                     </section>
                 </div>
 
-                {/* RIGHT - PACKAGE */}
-                <PackageValues trip={trip} />
+                {!hidePaymentBox && (
+                    <PackageValues trip={trip} />
+                )}
 
             </div>
         </>

@@ -20,8 +20,7 @@ export const ImageStatusBadge = ({ status }) => {
         </div>
     );
 };
-// console.log("CancellationManager :::::::::::::::",payment)
-// export default first
+
 
 export const imageTint = (status) => {
     if (status === 'APPROVED') return 'bg-rose-100/70 backdrop-grayscale';
@@ -66,7 +65,7 @@ export const ActionButtons = ({ status, cancellation, trip, payment, item, onSup
         return (
             <div className="flex gap-4 mt-8 flex-wrap">
                 <Link
-                    to={`/trip/${trip?._id}`}
+                    to={`/trip/${trip?._id}?review=true&booked=true`}
                     className="flex-1 text-center bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-xs min-w-[140px]"
                 >
                     View Full Details
@@ -90,7 +89,7 @@ export const ActionButtons = ({ status, cancellation, trip, payment, item, onSup
         return (
             <div className="flex gap-4 mt-8 flex-wrap">
                 <Link
-                    to={`/trip/${trip?._id}`}
+                    to={`/trip/${trip?._id}?review=true&booked=true`}
                     className="flex-1 text-center bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-xs min-w-[140px]"
                 >
                     View Full Details
@@ -117,7 +116,7 @@ export const ActionButtons = ({ status, cancellation, trip, payment, item, onSup
         return (
             <div className="flex gap-4 mt-8 flex-wrap">
                 <Link
-                    to={`/trip/${trip?._id}`}
+                    to={`/trip/${trip?._id}?review=true&booked=true`}
                     className="flex-1 text-center bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-xs min-w-[140px]"
                 >
                     View Full Details
@@ -155,7 +154,7 @@ export const ActionButtons = ({ status, cancellation, trip, payment, item, onSup
     return (
         <div className="flex gap-4 mt-8 flex-wrap">
             <Link
-                to={`/trip/${trip?._id}`}
+                to={`/trip/${trip?._id}?review=true&booked=true`}
                 className="flex-1 text-center bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 uppercase tracking-widest text-xs min-w-[140px]"
             >
                 View Full Details

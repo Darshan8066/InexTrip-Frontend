@@ -83,7 +83,7 @@ export default function RelatedTrips({ trip: propTrip }) {
                     </div>
                     <div key={id} ref={sliderRef} className="keen-slider pb-8">
 
-                        {[...relatedTrips, ...relatedTrips].map((Trip, index) => (
+                        {relatedTrips.map((Trip, index) => (
                             <Link
                                 to={`/trip/${Trip._id}`}
                                 key={Trip._id + "-" + index}

@@ -7,10 +7,15 @@ import ReviewSection from '../../component/user/ReviewSection';
 import TripContent from '../../component/user/TripContent';
 import { TripPhotos } from '../../component/user/TripPhotos';
 import PackageValues from "../../component/user/PackageValues";
+import { useSearchParams } from 'react-router-dom';
 
 const TripDetails = () => {
     const { id } = useParams();
     const [trip, setTrip] = useState(null);
+    const [searchParams] = useSearchParams();
+
+    const canReview = searchParams.get("review") === "true";
+    const isBookedUser = searchParams.get("booked") === "true";
 
     const allTrips = async () => {
         const res = await fetchTripById(id);
@@ -96,8 +101,15 @@ const TripDetails = () => {
                 <div className="w-full px-10 py-10 flex-grow">
 
                     <TripPhotos trip={trip} />
-                    <TripContent trip={trip} />
-                    <ReviewSection tripId={trip._id} />
+
+                    <TripContent
+                        trip={trip}
+                        hidePaymentBox={isBookedUser}
+                    />
+
+                    {canReview && (
+                        <ReviewSection tripId={trip._id} />
+                    )}
                 </div>
 
                 <div className="pl-8">

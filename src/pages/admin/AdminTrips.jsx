@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ProfileSidebar from "../../component/layouts/ProfileSidebar";
-import { deleteTrip, fetchTripWithPagination } from "../../services/tripServices";
+import { deleteTrip, fetchTrip } from "../../services/tripServices";
 import AdminSidebar from "../../component/admin/AdminSidebar";
 import { useAuth } from "../../context/AuthContext";
 import TripForm from "../../component/admin/TripForm";
@@ -37,16 +37,64 @@ export const AdminTrips = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // ── Fetch page from backend ───────────────────────────────────────────────
+  // const loadPage = useCallback(async (page) => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     const data = await fetchTripWithPagination({ page, limit: TRIPS_PER_PAGE });
+  //     console.log("trip data :", data)
+  //     // setTrips(data.trips);
+  //     const today = new Date();
+  //     today.setHours(0, 0, 0, 0);
+
+  //     const activeTrips = data.trips.filter((trip) => {
+  //       const endDate = new Date(trip.endDate);
+  //       endDate.setHours(0, 0, 0, 0);
+
+  //       return endDate >= today;
+  //     });
+
+  //     setTrips(activeTrips);
+  //     setTotalTrips(data.totalTrips);
+  //     setTotalPages(data.totalPages);
+  //     setCurrentPage(data.currentPage);
+  //   } catch (err) {
+  //     setError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, []);
+
   const loadPage = useCallback(async (page) => {
     setLoading(true);
     setError(null);
+
     try {
-      const data = await fetchTripWithPagination({ page, limit: TRIPS_PER_PAGE });
-      console.log("trip data :", data)
-      setTrips(data.trips);
-      setTotalTrips(data.totalTrips);
-      setTotalPages(data.totalPages);
-      setCurrentPage(data.currentPage);
+      const data = await fetchTrip(true);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // remove expired trips
+      const activeTrips = data.trip.filter((trip) => {
+        const endDate = new Date(trip.endDate);
+        endDate.setHours(0, 0, 0, 0);
+
+        return endDate >= today;
+      });
+
+      // pagination
+      const startIndex = (page - 1) * TRIPS_PER_PAGE;
+      const endIndex = startIndex + TRIPS_PER_PAGE;
+
+      const paginatedTrips = activeTrips.slice(startIndex, endIndex);
+
+      setTrips(paginatedTrips);
+
+      setTotalTrips(activeTrips.length);
+      setTotalPages(Math.ceil(activeTrips.length / TRIPS_PER_PAGE));
+      setCurrentPage(page);
+
     } catch (err) {
       setError(err.message);
     } finally {

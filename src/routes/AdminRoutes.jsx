@@ -13,7 +13,7 @@ import AdminEditTrip from "../pages/admin/AdminEditTrip";
 import AdminMessages from "../pages/admin/AdminMessages";
 import { AdminLayout } from "../component/layouts/AdminLayout";
 import { Settings } from "../pages/user/Settings";
-import EditProfile from "../component/user/EditProfile";
+// import EditProfile from "../component/user/EditProfile";
 import AdminCancellations from "../pages/admin/AdminCancellation";
 import AdminExpiredTrips from "../pages/admin/AdminExpiredTrip";
 
@@ -24,7 +24,7 @@ export default function AdminRoutes() {
 
             <Route element={<AdminLayout />}>
                 <Route path="/overview" element={<AdminDashboard />} />
-                <Route path="/admin/edit-profile" element={<EditProfile />} />
+                {/* <Route path="/admin/edit-profile" element={<EditProfile />} /> */}
                 <Route path="/admin/settings" element={<Settings />} />
                 <Route path="/users/profile/:id" element={<AdminUserProfile />} />
                 <Route path="/payments" element={<AdminPayments />} />

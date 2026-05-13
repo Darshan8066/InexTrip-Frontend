@@ -3,7 +3,7 @@ import ProtectedRoute from "../component/guards/ProtectedRoute";
 
 // User Pages
 import Dashboard from "../pages/user/UserDashboard";
-import EditProfile from "../component/user/EditProfile";
+// import EditProfile from "../component/user/EditProfile";
 import HistoryPage from "../pages/user/HistoryPage";
 import Favourites from "../pages/user/Favourites";
 import JoinTrip from "../pages/user/JoinTrip";
@@ -26,7 +26,7 @@ export default function UserRoutes() {
                     path="/trip/:id"
                     element={<TripDetails key={window.location.pathname} />} />
                 <Route path="/create-trip" element={<CreateTrip />} />
-                <Route path="/edit-profile" element={<EditProfile />} />
+                {/* <Route path="/edit-profile" element={<EditProfile />} /> */}
                 <Route path="/favourites" element={<Favourites />} />
                 <Route path="/user-reviews" element={<Reviews />} />
                 <Route path="/settings" element={<Settings />} />

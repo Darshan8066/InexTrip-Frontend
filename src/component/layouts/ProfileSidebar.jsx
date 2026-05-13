@@ -55,10 +55,10 @@ const ProfileSidebar = ({ isOpen, onClose }) => {
           </p>
 
           <Link
-            to={isAdmin ? "/admin/edit-profile" : "/edit-profile"}
+            to={isAdmin ? "/admin/settings" : "/settings"}
             onClick={onClose}
             className={`flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-all
-             ${location.pathname === "/edit-profile"
+             ${location.pathname === "/settings"
                 ? "bg-indigo-600 text-white shadow-md"
                 : "text-[#c9d1d9] hover:bg-gradient-to-r hover:from-indigo-500/10 hover:to-purple-500/10 hover:translate-x-1 transition-all duration-200 hover:text-white"
               }`}
@@ -97,22 +97,6 @@ const ProfileSidebar = ({ isOpen, onClose }) => {
           )}
         </div>
 
-        <div className="border-t border-[#30363d] py-2">
-          <p className="px-3 mt-3 text-[10px] text-[#8b949e] uppercase tracking-wider">
-            System
-          </p>
-          <Link
-            to={isAdmin ? "/admin/settings" : "/settings"}
-            onClick={onClose}
-            className="flex items-center text-[#c9d1d9] gap-3 px-3 py-2 text-sm hover:bg-gradient-to-r hover:from-indigo-500/10 hover:to-purple-500/10 hover:translate-x-1 transition-all duration-200 hover:text-white transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#8b949e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            Settings
-          </Link>
-        </div>
 
         <div className="border-t border-[#30363d] py-2">
           <button

@@ -8,8 +8,14 @@ import { useAuth } from '../../context/AuthContext';
 import NotificationBell from '../common/NotificationBell';
 
 export const Navbar = () => {
+  // const [isSidebarOpen, setSidebarOpen] = useState(false);
+  // const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
@@ -19,23 +25,58 @@ export const Navbar = () => {
     return <Outlet />;   // only render pages, no navbar
   }
 
+  // useEffect(() => {
+  //   let timeout;
+
+  //   const handleScroll = () => {
+  //     document.body.classList.add("show-scrollbar");
+
+  //     clearTimeout(timeout);
+
+  //     timeout = setTimeout(() => {
+  //       document.body.classList.remove("show-scrollbar");
+  //     }, 800);
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
+
+
   useEffect(() => {
     let timeout;
 
     const handleScroll = () => {
-      document.body.classList.add("show-scrollbar");
+      const currentScrollY = window.scrollY;
 
+      // Hide navbar when scrolling down
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        setShowNavbar(false);
+      } else {
+        // Show navbar when scrolling up
+        setShowNavbar(true);
+      }
+
+      // Show navbar after scrolling stops
       clearTimeout(timeout);
 
       timeout = setTimeout(() => {
-        document.body.classList.remove("show-scrollbar");
-      }, 800);
+        setShowNavbar(true);
+      }, 1600);
+
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
+
+
+
 
   const navButtons = user ? [
     { label: 'Dashboard', path: '/dashboard' },
@@ -52,7 +93,16 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-[100] bg-slate-900 h-16 border-b border-white/10 shadow-lg">
+      {/* <nav className="sticky top-0 z-[100] bg-slate-900 h-16 border-b border-white/10 shadow-lg"> */}
+
+
+      <nav
+        className={`fixed top-0 left-0 w-full z-[100]
+           bg-slate-900 h-16 border-b border-white/10 shadow-lg
+              transition-all duration-500 ease-in-out
+             ${showNavbar ? "translate-y-0" : "-translate-y-full"}
+`}
+      >
         <div className="max-w-[1400px] m-auto p-4 flex items-center justify-between h-full">
           {/* Profile & Name on the Left */}
           <div className="flex items-center gap-3">
@@ -98,7 +148,7 @@ export const Navbar = () => {
             {user && (
               <NotificationBell theme="dark" />
             )}
-            
+
             {user ? (
               <div className="relative ">
                 <button
@@ -144,7 +194,9 @@ export const Navbar = () => {
         onClose={() => setMobileSidebarOpen(false)}
         logout={logout}
       />
-      <Outlet />
+      <div className="pt-14">
+        <Outlet />
+      </div>
     </>
   );
 };

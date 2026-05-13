@@ -14,11 +14,18 @@ const AdminExpiredTrips = () => {
             // Fetch all trips INCLUDING expired ones
             const data = await fetchTrip(true);
             console.log("AdminExpiredTrips:", data)
-            const today = new Date().toISOString().split('T')[0];
-            console.log("AdminExpiredTrips Date:", today)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const expired = data.trip.filter((trip) => {
+                const endDate = new Date(trip.endDate);
+                endDate.setHours(0, 0, 0, 0);
+                return endDate < today;
+            });
+            console.log("expired", expired);
 
             // Filter for only those where endDate < today
-            const expired = data.filter(t => t.endDate < today);
+            // const expired = data.filter(t => t.endDate < today);
             setExpiredTrips(expired);
         } catch (err) {
             console.error("Failed to load expired trips", err);
@@ -73,7 +80,7 @@ const AdminExpiredTrips = () => {
                                             onClick={() => handleEditTrip(trip)}
                                             className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[8px] font-black text-indigo-600 uppercase tracking-widest border border-slate-100 hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
                                         >
-                                            View Details
+                                            Edit
                                         </button>
                                         <div className="absolute bottom-4 left-4 text-white">
                                             <p className="text-[8px] font-black text-indigo-100 uppercase tracking-widest mb-0.5">{trip?.from}</p>

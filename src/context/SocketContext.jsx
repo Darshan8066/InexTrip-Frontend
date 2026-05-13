@@ -16,19 +16,19 @@ const getSocketUrl = () => {
 };
 
 export function SocketProvider({ children }) {
-    const { user }      = useAuth();
-    const socketRef     = useRef(null);
-    const pollRef       = useRef(null);
+    const { user } = useAuth();
+    const socketRef = useRef(null);
+    const pollRef = useRef(null);
 
     const [notifications, setNotifications] = useState([]);
-    const [unreadCount,   setUnreadCount]   = useState(0);
-    const [liveNotif,     setLiveNotif]     = useState(null);
+    const [unreadCount, setUnreadCount] = useState(0);
+    const [liveNotif, setLiveNotif] = useState(null);
 
     // ── Fetch all notifications from DB (initial load + fallback poll) ────────
     const fetchNotifications = useCallback(async () => {
         if (!user) return;
         const res = await getMyNotifications();
-        setNotifications(res.data   || []);
+        setNotifications(res.data || []);
         setUnreadCount(res.unreadCount || 0);
     }, [user]);
 
